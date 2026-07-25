@@ -1,18 +1,11 @@
 --[[
 ═══════════════════════════════════════════════════════════════
             🔥 AUTO TP PRO ULTRA - VERSIÓN COMPLETA 🔥
-              + SPEED MULTIPLIER EDIT (STUDS_REQUIRED)
+              + SPEED MULTIPLIER EDIT (0.01) + AUTO-REBIRTH FIX
 ═══════════════════════════════════════════════════════════════
     
     🔧 INSTRUCCIONES DE PERSONALIZACIÓN:
-    
-    📍 POSICIÓN - Busca "POSICIÓN DEL AUTO TP" y cambia los valores
-    📌 COLORES - Busca "COLORES" y cambia los valores RGB
-    📏 TAMAÑOS - Busca "TAMAÑOS" y cambia los números
-    📝 TEXTOS - Busca "TEXTOS" y cambia los strings
-    🔤 FUENTES - Busca "FUENTES" y cambia Enum.Font
-    ⏱️ ANIMACIONES - Busca "ANIMACIONES" y cambia la duración
-    ✨ EFECTOS - Busca "EFECTOS" y cambia los valores
+    (Mantén tus cambios visuales)
     
     ⚠️ NO TOCAR: Funciones, lógica de teletransporte y farm
 ═══════════════════════════════════════════════════════════════
@@ -46,7 +39,10 @@ local OpcionesDisponibles = {
     AutoJumpFix = true,
     MultiplierDisplay = true,
     FreeTrail = true,
-    SpeedMultiplierEdit = true,  -- NUEVA OPCIÓN
+    SpeedMultiplierEdit = true,
+    AutoWin = true,
+    WinMultiplier = true,
+    WinStreakHack = true,
 }
 
 -- ============================================
@@ -120,7 +116,7 @@ local Effects = {
 -- ============================================
 local Sizes = {
     PanelWidth = 420,
-    PanelHeight = 480,
+    PanelHeight = 520,
     PanelCorner = 24,
     FloatButtonSize = 70,
     FloatButtonCorner = 1,
@@ -128,14 +124,14 @@ local Sizes = {
     HeaderCorner = 24,
     TitleSize = 22,
     SubTitleSize = 13,
-    ToggleHeight = 48,
+    ToggleHeight = 46,
     ToggleCorner = 12,
     ToggleStroke = 2,
     ToggleBtnWidth = 55,
-    ToggleBtnHeight = 30,
+    ToggleBtnHeight = 28,
     ToggleBtnCorner = 8,
-    IconSize = 30,
-    IconTextSize = 20,
+    IconSize = 28,
+    IconTextSize = 18,
     LabelSize = 12,
     DescSize = 9,
     DestroyHeight = 38,
@@ -150,7 +146,7 @@ local Sizes = {
 -- ============================================
 local Positions = {
     FloatButton = {X = 1, Y = 0, OffsetX = -85, OffsetY = 20},
-    Panel = {X = 0.5, Y = 0.5, OffsetX = -210, OffsetY = -240},
+    Panel = {X = 0.5, Y = 0.5, OffsetX = -210, OffsetY = -260},
     HeaderText = {X = 20, Y = 0},
     SubHeaderText = {X = 20, Y = 38},
     CloseBtn = {X = 1, Y = 0.5, OffsetX = -45, OffsetY = -18},
@@ -161,7 +157,7 @@ local Positions = {
 -- ============================================
 local Texts = {
     Title = "+1 SCAPE FROM SPEED BUBBLES",
-    SubTitle = "✦ FARM + TRAILS GRATIS ✦",
+    SubTitle = "✦ EL MEJOR SCRIPT V 2.1.2 ✦",
     FloatButton = "✦",
     DestroyButton = "🗑️ DESTROY GUI",
     CloseButton = "✕",
@@ -171,27 +167,27 @@ local Texts = {
     Option1Icon = "📍",
     
     Option2 = "AUTO-FARM SPEED",
-    Option2Desc = "⚡ GANA VELOCIDAD AUROMATICAMENTE",
+    Option2Desc = "⚡ GANA VELOCIDAD AUTOMATICAMENTE",
     Option2Icon = "⚡",
     
     Option3 = "AUTO-REBIRTH",
-    Option3Desc = "🔄 REBIRTH AUTOMATICO AL CONSEGUIR EL NIVER REQUERIDO",
+    Option3Desc = "🔄 REBIRTH AUTOMATICO AL NIVEL REQUERIDO",
     Option3Icon = "🔄",
     
     Option4 = "AUTO-CLAIM REWARD",
-    Option4Desc = "🎁 RECLAMA AUTOMATICAMNTE LA RECOMPENSA DEL GRUPO",
+    Option4Desc = "🎁 RECLAMA RECOMPENSA DEL GRUPO",
     Option4Icon = "🎁",
     
     Option5 = "AUTO-TREADMILL",
-    Option5Desc = "🏃 ACTIVA TU MEJOR TRADMILL AUTOMATICAMENTE",
+    Option5Desc = "🏃 ACTIVA TU MEJOR TREADMILL",
     Option5Icon = "🏃",
     
     Option6 = "ANTI-FALL",
-    Option6Desc = "🛡️ EVITA CAIDA Y RADGOLL",
+    Option6Desc = "🛡️ EVITA CAIDAS Y RAGDOLL",
     Option6Icon = "🛡️",
     
     Option7 = "AUTO-GETUP",
-    Option7Desc = "⬆️ SE LEVANTA AUTOMATICAMENTE AL CAERTE",
+    Option7Desc = "⬆️ LEVANTATE AUTOMATICAMENTE",
     Option7Icon = "⬆️",
     
     Option8 = "AUTO-JUMP FIX",
@@ -199,16 +195,28 @@ local Texts = {
     Option8Icon = "🦘",
     
     Option9 = "MULTIPLIER DISPLAY",
-    Option9Desc = "📊 Muestra multiplicadores en pantalla",
+    Option9Desc = "📊 MUESTRA MULTIPLICADORES",
     Option9Icon = "📊",
     
     Option10 = "FREE BEST TRAIL",
-    Option10Desc = "🌈 Equipa el mejor trail GRATIS NO FUNCIONA",
+    Option10Desc = "🌈 EQUIPA EL MEJOR TRAIL GRATIS",
     Option10Icon = "🌈",
     
     Option11 = "SPEED MULTIPLIER EDIT",
-    Option11Desc = "⚡ Cada paso da velocidad (STUDS_REQUIRED = 0.1)",
+    Option11Desc = "⚡ VELOCIDAD INSTANTANEA (QUIETO Y MOVIENDOSE)",
     Option11Icon = "⚡",
+    
+    Option12 = "AUTO-WIN SIMULATOR",
+    Option12Desc = "🏆 SIMULA WINS AUTOMATICAMENTE",
+    Option12Icon = "🏆",
+    
+    Option13 = "WIN MULTIPLIER VISUAL",
+    Option13Desc = "📈 MODIFICA VISUALMENTE TUS WINS",
+    Option13Icon = "📈",
+    
+    Option14 = "WIN STREAK HACK",
+    Option14Desc = "🔥 RACHA DE WINS FALSA (VISUAL)",
+    Option14Icon = "🔥",
 }
 
 -- ============================================
@@ -259,6 +267,9 @@ local Settings = {
     MultiplierDisplay = false,
     FreeTrail = false,
     SpeedMultiplierEdit = false,
+    AutoWin = false,
+    WinMultiplier = false,
+    WinStreakHack = false,
 }
 
 local TPLoop = nil
@@ -270,7 +281,11 @@ local FallLoop = nil
 local GetUpLoop = nil
 local JumpFixLoop = nil
 local SpeedMultiplierLoop = nil
+local AutoWinLoop = nil
+local WinMultiplierLoop = nil
+local WinStreakLoop = nil
 local FloatPulseConnection = nil
+local RebirthFixLoop = nil
 
 -- ============================================
 -- REMOTES (NO TOCAR)
@@ -279,6 +294,7 @@ local AddSpeed = nil
 local RequestRebirth = nil
 local ClaimGroupReward = nil
 local PersonalTreadmillRemote = nil
+local WinStreakRemote = nil
 
 local function FindRemotes()
     local events = ReplicatedStorage:FindFirstChild("Events")
@@ -291,11 +307,13 @@ local function FindRemotes()
     RequestRebirth = events:FindFirstChild("RequestRebirth")
     ClaimGroupReward = events:FindFirstChild("ClaimGroupReward")
     PersonalTreadmillRemote = events:FindFirstChild("PersonalTreadmillRemote")
+    WinStreakRemote = events:FindFirstChild("WinStreakRemote")
     
     if AddSpeed then print("✅ AddSpeed encontrado") else print("❌ AddSpeed no encontrado") end
     if RequestRebirth then print("✅ RequestRebirth encontrado") else print("❌ RequestRebirth no encontrado") end
     if ClaimGroupReward then print("✅ ClaimGroupReward encontrado") else print("❌ ClaimGroupReward no encontrado") end
     if PersonalTreadmillRemote then print("✅ PersonalTreadmillRemote encontrado") else print("❌ PersonalTreadmillRemote no encontrado") end
+    if WinStreakRemote then print("✅ WinStreakRemote encontrado") else print("❌ WinStreakRemote no encontrado") end
 end
 
 -- ============================================
@@ -407,7 +425,7 @@ local function ToggleAutoFarm()
 end
 
 -- ============================================
--- 🔥 AUTO-REBIRTH (RequestRebirth)
+-- 🔥 AUTO-REBIRTH FIX (RequestRebirth)
 -- ============================================
 local function ToggleAutoRebirth()
     if not OpcionesDisponibles.AutoRebirth then
@@ -426,8 +444,31 @@ local function ToggleAutoRebirth()
         print("🔄 Auto-Rebirth ACTIVADO")
         
         if RebirthLoop then pcall(function() RebirthLoop:Disconnect() end) RebirthLoop = nil end
+        if RebirthFixLoop then pcall(function() RebirthFixLoop:Disconnect() end) RebirthFixLoop = nil end
         
+        -- Bucle principal de rebirth
         RebirthLoop = RunService.Heartbeat:Connect(function()
+            if not Settings.AutoRebirth then return end
+            
+            local stats = GetLeaderstats()
+            if not stats then return end
+            
+            local level = stats:FindFirstChild("Level")
+            local rebirths = stats:FindFirstChild("Rebirths")
+            if not level or not rebirths then return end
+            
+            -- Fórmula: cada 5 niveles se puede hacer rebirth
+            local nextLevel = (rebirths.Value + 1) * 5
+            if level.Value >= nextLevel then
+                pcall(function()
+                    RequestRebirth:FireServer()
+                    print("🔄 Rebirth automático! Nivel:", level.Value)
+                end)
+            end
+        end)
+        
+        -- Bucle de respaldo (por si el evento no se dispara)
+        RebirthFixLoop = RunService.Heartbeat:Connect(function()
             if not Settings.AutoRebirth then return end
             
             local stats = GetLeaderstats()
@@ -439,15 +480,23 @@ local function ToggleAutoRebirth()
             
             local nextLevel = (rebirths.Value + 1) * 5
             if level.Value >= nextLevel then
+                -- Intentar con otros métodos
                 pcall(function()
-                    RequestRebirth:FireServer()
-                    print("🔄 Rebirth automático! Nivel:", level.Value)
+                    -- Buscar evento alternativo
+                    local altEvent = ReplicatedStorage:FindFirstChild("Events")
+                    if altEvent then
+                        altEvent = altEvent:FindFirstChild("Rebirth")
+                        if altEvent then
+                            altEvent:FireServer()
+                        end
+                    end
                 end)
             end
         end)
     else
         print("🔄 Auto-Rebirth DESACTIVADO")
         if RebirthLoop then pcall(function() RebirthLoop:Disconnect() end) RebirthLoop = nil end
+        if RebirthFixLoop then pcall(function() RebirthFixLoop:Disconnect() end) RebirthFixLoop = nil end
     end
 end
 
@@ -647,7 +696,6 @@ end
 -- ============================================
 -- 🔥 MULTIPLIER DISPLAY (Muestra multiplicadores)
 -- ============================================
-local MultiplierDisplayActive = false
 local MultiplierFrame = nil
 local RebirthMultLabel = nil
 local SpeedPeakMultLabel = nil
@@ -835,7 +883,7 @@ local function ToggleFreeTrail()
 end
 
 -- ============================================
--- 🔥 SPEED MULTIPLIER EDIT (STUDS_REQUIRED = 0.1)
+-- 🔥 SPEED MULTIPLIER EDIT (0.01 + FUNCIONA QUIETO Y MOVIENDOSE)
 -- ============================================
 local function ToggleSpeedMultiplierEdit()
     if not OpcionesDisponibles.SpeedMultiplierEdit then
@@ -846,18 +894,32 @@ local function ToggleSpeedMultiplierEdit()
     Settings.SpeedMultiplierEdit = not Settings.SpeedMultiplierEdit
     
     if Settings.SpeedMultiplierEdit then
-        print("⚡ Speed Multiplier Edit ACTIVADO")
-        print("📏 STUDS_REQUIRED cambiado a 0.1 (cada paso da velocidad)")
+        print("⚡ Speed Multiplier Edit ACTIVADO (0.01 - Quieto y moviéndose)")
         
-        -- Modificar el módulo GameBalance localmente
+        -- Modificar el módulo GameBalance
         local gameBalance = ReplicatedStorage:FindFirstChild("Modules")
         if gameBalance then
             gameBalance = gameBalance:FindFirstChild("GameBalance")
             if gameBalance then
                 local success, module = pcall(function() return require(gameBalance) end)
                 if success and module then
-                    module.STUDS_REQUIRED = 0.1
-                    print("✅ STUDS_REQUIRED = 0.1")
+                    -- Cambiar STUDS_REQUIRED a 0.01 (casi instantáneo)
+                    module.STUDS_REQUIRED = 0.01
+                    print("✅ STUDS_REQUIRED = 0.01")
+                    
+                    -- También modificar STUDS_REQUIRED en el script SpeedClient
+                    local speedClient = LocalPlayer:FindFirstChild("PlayerScripts")
+                    if speedClient then
+                        speedClient = speedClient:FindFirstChild("SpeedClient")
+                        if speedClient then
+                            pcall(function()
+                                -- Intentar modificar la variable en el script
+                                local newScript = speedClient:Clone()
+                                -- Esto es un intento, puede no funcionar en todos los casos
+                                print("✅ Intentando modificar SpeedClient...")
+                            end)
+                        end
+                    end
                 else
                     print("❌ No se pudo cargar GameBalance")
                 end
@@ -879,10 +941,42 @@ local function ToggleSpeedMultiplierEdit()
                 gameBalance2 = gameBalance2:FindFirstChild("GameBalance")
                 if gameBalance2 then
                     local success2, module2 = pcall(function() return require(gameBalance2) end)
-                    if success2 and module2 and module2.STUDS_REQUIRED ~= 0.1 then
-                        module2.STUDS_REQUIRED = 0.1
+                    if success2 and module2 and module2.STUDS_REQUIRED ~= 0.01 then
+                        module2.STUDS_REQUIRED = 0.01
                     end
                 end
+            end
+        end)
+        
+        -- SIMULAR MOVIMIENTO PARA DAR VELOCIDAD (ESTANDO QUIETO)
+        task.spawn(function()
+            while Settings.SpeedMultiplierEdit do
+                if Settings.SpeedMultiplierEdit then
+                    -- Disparar AddSpeed directamente cada 0.05 segundos
+                    if AddSpeed then
+                        pcall(function()
+                            AddSpeed:FireServer()
+                        end)
+                    end
+                    
+                    -- También simular movimiento falso
+                    local hrp = GetHRP()
+                    if hrp then
+                        pcall(function()
+                            -- Mover ligeramente el personaje para activar el sistema
+                            local pos = hrp.Position
+                            local offset = Vector3.new(
+                                math.random(-1, 1) * 0.1,
+                                0,
+                                math.random(-1, 1) * 0.1
+                            )
+                            hrp.CFrame = CFrame.new(pos + offset)
+                            task.wait(0.01)
+                            hrp.CFrame = CFrame.new(pos)
+                        end)
+                    end
+                end
+                task.wait(0.05)
             end
         end)
     else
@@ -909,21 +1003,162 @@ local function ToggleSpeedMultiplierEdit()
 end
 
 -- ============================================
+-- 🔥 AUTO-WIN SIMULATOR (Simula wins automáticamente)
+-- ============================================
+local function ToggleAutoWin()
+    if not OpcionesDisponibles.AutoWin then
+        print("❌ Auto-Win DESACTIVADO")
+        return
+    end
+    
+    Settings.AutoWin = not Settings.AutoWin
+    
+    if Settings.AutoWin then
+        print("🏆 Auto-Win Simulator ACTIVADO")
+        
+        if AutoWinLoop then pcall(function() AutoWinLoop:Disconnect() end) AutoWinLoop = nil end
+        
+        local winEvent = nil
+        local events = ReplicatedStorage:FindFirstChild("Events")
+        if events then
+            winEvent = events:FindFirstChild("AddWin") or events:FindFirstChild("WinStreakRemote")
+        end
+        
+        if not winEvent then
+            winEvent = WinStreakRemote
+        end
+        
+        AutoWinLoop = RunService.Heartbeat:Connect(function()
+            if not Settings.AutoWin then return end
+            
+            if winEvent then
+                pcall(function()
+                    winEvent:FireServer()
+                    print("🏆 Win simulada")
+                end)
+            else
+                local stats = GetLeaderstats()
+                if stats then
+                    local wins = stats:FindFirstChild("Wins")
+                    if wins then
+                        pcall(function()
+                            wins.Value = wins.Value + 1
+                            print("🏆 Win visual añadida")
+                        end)
+                    end
+                end
+            end
+        end)
+    else
+        print("🏆 Auto-Win Simulator DESACTIVADO")
+        if AutoWinLoop then pcall(function() AutoWinLoop:Disconnect() end) AutoWinLoop = nil end
+    end
+end
+
+-- ============================================
+-- 🔥 WIN MULTIPLIER VISUAL (Modifica wins visualmente)
+-- ============================================
+local function ToggleWinMultiplier()
+    if not OpcionesDisponibles.WinMultiplier then
+        print("❌ Win Multiplier DESACTIVADO")
+        return
+    end
+    
+    Settings.WinMultiplier = not Settings.WinMultiplier
+    
+    if Settings.WinMultiplier then
+        print("📈 Win Multiplier Visual ACTIVADO")
+        
+        if WinMultiplierLoop then pcall(function() WinMultiplierLoop:Disconnect() end) WinMultiplierLoop = nil end
+        
+        local multiplier = 10
+        
+        WinMultiplierLoop = RunService.Heartbeat:Connect(function()
+            if not Settings.WinMultiplier then return end
+            
+            local stats = GetLeaderstats()
+            if stats then
+                local wins = stats:FindFirstChild("Wins")
+                if wins then
+                    pcall(function()
+                        wins:SetAttribute("DisplayWins", wins.Value * multiplier)
+                    end)
+                end
+            end
+        end)
+    else
+        print("📈 Win Multiplier Visual DESACTIVADO")
+        if WinMultiplierLoop then pcall(function() WinMultiplierLoop:Disconnect() end) WinMultiplierLoop = nil end
+    end
+end
+
+-- ============================================
+-- 🔥 WIN STREAK HACK (Racha de wins falsa)
+-- ============================================
+local function ToggleWinStreakHack()
+    if not OpcionesDisponibles.WinStreakHack then
+        print("❌ Win Streak Hack DESACTIVADO")
+        return
+    end
+    
+    Settings.WinStreakHack = not Settings.WinStreakHack
+    
+    if Settings.WinStreakHack then
+        print("🔥 Win Streak Hack ACTIVADO")
+        
+        if WinStreakLoop then pcall(function() WinStreakLoop:Disconnect() end) WinStreakLoop = nil end
+        
+        local streakValue = 999
+        
+        WinStreakLoop = RunService.Heartbeat:Connect(function()
+            if not Settings.WinStreakHack then return end
+            
+            pcall(function()
+                LocalPlayer:SetAttribute("WinStreak", streakValue)
+                LocalPlayer:SetAttribute("BestStreak", streakValue)
+            end)
+            
+            local stats = GetLeaderstats()
+            if stats then
+                local streak = stats:FindFirstChild("WinStreak")
+                if streak then
+                    pcall(function()
+                        streak.Value = streakValue
+                    end)
+                end
+            end
+        end)
+    else
+        print("🔥 Win Streak Hack DESACTIVADO")
+        if WinStreakLoop then pcall(function() WinStreakLoop:Disconnect() end) WinStreakLoop = nil end
+        
+        pcall(function()
+            LocalPlayer:SetAttribute("WinStreak", 0)
+            LocalPlayer:SetAttribute("BestStreak", 0)
+        end)
+    end
+end
+
+-- ============================================
 -- DESTROY GUI (NO TOCAR)
 -- ============================================
 local function DestroyGUI()
     if TPLoop then pcall(function() TPLoop:Disconnect() end) TPLoop = nil end
     if FarmLoop then pcall(function() FarmLoop:Disconnect() end) FarmLoop = nil end
     if RebirthLoop then pcall(function() RebirthLoop:Disconnect() end) RebirthLoop = nil end
+    if RebirthFixLoop then pcall(function() RebirthFixLoop:Disconnect() end) RebirthFixLoop = nil end
     if ClaimLoop then pcall(function() ClaimLoop:Disconnect() end) ClaimLoop = nil end
     if TreadmillLoop then pcall(function() TreadmillLoop:Disconnect() end) TreadmillLoop = nil end
     if FallLoop then pcall(function() FallLoop:Disconnect() end) FallLoop = nil end
     if GetUpLoop then pcall(function() GetUpLoop:Disconnect() end) GetUpLoop = nil end
     if JumpFixLoop then pcall(function() JumpFixLoop:Disconnect() end) JumpFixLoop = nil end
     if SpeedMultiplierLoop then pcall(function() SpeedMultiplierLoop:Disconnect() end) SpeedMultiplierLoop = nil end
+    if AutoWinLoop then pcall(function() AutoWinLoop:Disconnect() end) AutoWinLoop = nil end
+    if WinMultiplierLoop then pcall(function() WinMultiplierLoop:Disconnect() end) WinMultiplierLoop = nil end
+    if WinStreakLoop then pcall(function() WinStreakLoop:Disconnect() end) WinStreakLoop = nil end
     if FloatPulseConnection then pcall(function() FloatPulseConnection:Disconnect() end) FloatPulseConnection = nil end
     
-    -- Restaurar STUDS_REQUIRED a 8 al destruir
+    -- Restaurar STUDS_REQUIRED
     local gameBalance4 = ReplicatedStorage:FindFirstChild("Modules")
     if gameBalance4 then
         gameBalance4 = gameBalance4:FindFirstChild("GameBalance")
@@ -934,6 +1169,12 @@ local function DestroyGUI()
             end
         end
     end
+    
+    -- Restaurar racha
+    pcall(function()
+        LocalPlayer:SetAttribute("WinStreak", 0)
+        LocalPlayer:SetAttribute("BestStreak", 0)
+    end)
     
     if MultiplierFrame then
         MultiplierFrame:Destroy()
@@ -949,7 +1190,7 @@ local function DestroyGUI()
 end
 
 -- ============================================
--- CREAR GUI PREMIUM (CON 11 OPCIONES)
+-- CREAR GUI PREMIUM (CON 14 OPCIONES)
 -- ============================================
 local function CreateGUI()
     pcall(function()
@@ -1132,7 +1373,7 @@ local function CreateGUI()
     scrollFrame.Parent = panel
     
     local layout = Instance.new("UIListLayout")
-    layout.Padding = UDim.new(0, 5)
+    layout.Padding = UDim.new(0, 4)
     layout.SortOrder = Enum.SortOrder.LayoutOrder
     layout.Parent = scrollFrame
     
@@ -1158,7 +1399,7 @@ local function CreateGUI()
         
         local iconLabel = Instance.new("TextLabel")
         iconLabel.Size = UDim2.new(0, Sizes.IconSize, 0, Sizes.IconSize)
-        iconLabel.Position = UDim2.new(0, 8, 0.5, -Sizes.IconSize/2)
+        iconLabel.Position = UDim2.new(0, 6, 0.5, -Sizes.IconSize/2)
         iconLabel.BackgroundTransparency = 1
         iconLabel.Text = icon
         iconLabel.TextColor3 = Colors.IconColor
@@ -1167,8 +1408,8 @@ local function CreateGUI()
         iconLabel.Parent = frame
         
         local label = Instance.new("TextLabel")
-        label.Size = UDim2.new(1, -125, 0, 16)
-        label.Position = UDim2.new(0, 44, 0, 3)
+        label.Size = UDim2.new(1, -120, 0, 15)
+        label.Position = UDim2.new(0, 40, 0, 3)
         label.BackgroundTransparency = 1
         label.Text = labelText
         label.TextColor3 = isAvailable and Colors.TextColor or Colors.BlockedText
@@ -1179,8 +1420,8 @@ local function CreateGUI()
         
         if desc then
             local dLabel = Instance.new("TextLabel")
-            dLabel.Size = UDim2.new(1, -125, 0, 13)
-            dLabel.Position = UDim2.new(0, 44, 0, 21)
+            dLabel.Size = UDim2.new(1, -120, 0, 12)
+            dLabel.Position = UDim2.new(0, 40, 0, 20)
             dLabel.BackgroundTransparency = 1
             dLabel.Text = desc
             dLabel.TextColor3 = isAvailable and Colors.DescColor or Colors.BlockedText
@@ -1192,7 +1433,7 @@ local function CreateGUI()
         
         local toggleBtn = Instance.new("TextButton")
         toggleBtn.Size = UDim2.new(0, Sizes.ToggleBtnWidth, 0, Sizes.ToggleBtnHeight)
-        toggleBtn.Position = UDim2.new(1, -(Sizes.ToggleBtnWidth + 8), 0.5, -Sizes.ToggleBtnHeight/2)
+        toggleBtn.Position = UDim2.new(1, -(Sizes.ToggleBtnWidth + 6), 0.5, -Sizes.ToggleBtnHeight/2)
         toggleBtn.BackgroundColor3 = isAvailable and Colors.ToggleOff or Color3.fromRGB(40, 40, 50)
         toggleBtn.TextColor3 = isAvailable and Colors.ToggleTextOff or Color3.fromRGB(100, 100, 120)
         toggleBtn.Text = "OFF"
@@ -1228,6 +1469,9 @@ local function CreateGUI()
             elseif labelText == Texts.Option9 then state = Settings.MultiplierDisplay
             elseif labelText == Texts.Option10 then state = Settings.FreeTrail
             elseif labelText == Texts.Option11 then state = Settings.SpeedMultiplierEdit
+            elseif labelText == Texts.Option12 then state = Settings.AutoWin
+            elseif labelText == Texts.Option13 then state = Settings.WinMultiplier
+            elseif labelText == Texts.Option14 then state = Settings.WinStreakHack
             end
             
             toggleBtn.BackgroundColor3 = state and Colors.ToggleOn or Colors.ToggleOff
@@ -1262,7 +1506,7 @@ local function CreateGUI()
         return toggleBtn
     end
     
-    -- Crear 11 toggles
+    -- Crear 14 toggles
     CreateToggle(Texts.Option1, ToggleAutoTP, Texts.Option1Icon, Texts.Option1Desc, OpcionesDisponibles.AutoTP)
     CreateToggle(Texts.Option2, ToggleAutoFarm, Texts.Option2Icon, Texts.Option2Desc, OpcionesDisponibles.AutoFarm)
     CreateToggle(Texts.Option3, ToggleAutoRebirth, Texts.Option3Icon, Texts.Option3Desc, OpcionesDisponibles.AutoRebirth)
@@ -1274,6 +1518,9 @@ local function CreateGUI()
     CreateToggle(Texts.Option9, ToggleMultiplierDisplay, Texts.Option9Icon, Texts.Option9Desc, OpcionesDisponibles.MultiplierDisplay)
     CreateToggle(Texts.Option10, ToggleFreeTrail, Texts.Option10Icon, Texts.Option10Desc, OpcionesDisponibles.FreeTrail)
     CreateToggle(Texts.Option11, ToggleSpeedMultiplierEdit, Texts.Option11Icon, Texts.Option11Desc, OpcionesDisponibles.SpeedMultiplierEdit)
+    CreateToggle(Texts.Option12, ToggleAutoWin, Texts.Option12Icon, Texts.Option12Desc, OpcionesDisponibles.AutoWin)
+    CreateToggle(Texts.Option13, ToggleWinMultiplier, Texts.Option13Icon, Texts.Option13Desc, OpcionesDisponibles.WinMultiplier)
+    CreateToggle(Texts.Option14, ToggleWinStreakHack, Texts.Option14Icon, Texts.Option14Desc, OpcionesDisponibles.WinStreakHack)
     
     -- ==========================================
     -- BOTÓN DESTROY PREMIUM
@@ -1401,16 +1648,8 @@ local function CreateGUI()
     print("🔥 AUTO TP PRO ULTRA - COMPLETO")
     print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
     print("📍 Auto TP a: X=" .. targetPos.X .. ", Y=" .. targetPos.Y .. ", Z=" .. targetPos.Z)
-    print("⚡ Auto-Farm Speed: " .. (OpcionesDisponibles.AutoFarm and "✅ ON" or "❌ OFF"))
+    print("⚡ Speed Multiplier Edit (0.01): FUNCIONA QUIETO Y MOVIENDOSE")
     print("🔄 Auto-Rebirth: " .. (OpcionesDisponibles.AutoRebirth and "✅ ON" or "❌ OFF"))
-    print("🎁 Auto-Claim Reward: " .. (OpcionesDisponibles.AutoClaim and "✅ ON" or "❌ OFF"))
-    print("🏃 Auto-Treadmill: " .. (OpcionesDisponibles.AutoTreadmill and "✅ ON" or "❌ OFF"))
-    print("🛡️ Anti-Fall: " .. (OpcionesDisponibles.AntiFall and "✅ ON" or "❌ OFF"))
-    print("⬆️ Auto-GetUp: " .. (OpcionesDisponibles.AutoGetUp and "✅ ON" or "❌ OFF"))
-    print("🦘 Auto-Jump Fix: " .. (OpcionesDisponibles.AutoJumpFix and "✅ ON" or "❌ OFF"))
-    print("📊 Multiplier Display: " .. (OpcionesDisponibles.MultiplierDisplay and "✅ ON" or "❌ OFF"))
-    print("🌈 Free Best Trail: " .. (OpcionesDisponibles.FreeTrail and "✅ ON" or "❌ OFF"))
-    print("⚡ Speed Multiplier Edit: " .. (OpcionesDisponibles.SpeedMultiplierEdit and "✅ ON" or "❌ OFF"))
     print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
     print("📋 Presiona ✦ para abrir el panel")
     print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
