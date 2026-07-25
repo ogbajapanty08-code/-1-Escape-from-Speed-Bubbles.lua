@@ -1,7 +1,7 @@
 --[[
 ═══════════════════════════════════════════════════════════════
-                    SCRIPT AUTO TP - NUEVO JUEGO
-                    Configuración Visual Personalizable
+                🔥 AUTO TP PRO ULTRA - VERSIÓN PREMIUM 🔥
+                    Configuración Visual 1000x Mejorada
 ═══════════════════════════════════════════════════════════════
     
     🔧 INSTRUCCIONES DE PERSONALIZACIÓN:
@@ -12,6 +12,7 @@
     📝 TEXTOS - Busca "TEXTOS" y cambia los strings
     🔤 FUENTES - Busca "FUENTES" y cambia Enum.Font
     ⏱️ ANIMACIONES - Busca "ANIMACIONES" y cambia la duración
+    ✨ EFECTOS - Busca "EFECTOS" y cambia los valores
     
     ⚠️ NO TOCAR: Funciones, lógica de teletransporte
 ═══════════════════════════════════════════════════════════════
@@ -22,6 +23,7 @@ local Workspace = game:GetService("Workspace")
 local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
+local Lighting = game:GetService("Lighting")
 
 local LocalPlayer = Players.LocalPlayer
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
@@ -32,121 +34,147 @@ local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 -- ═══════════════════════════════════════════
 -- ============================================
 
--- 🔥 AQUÍ CONTROLAS QUÉ OPCIONES ESTÁN ACTIVADAS (ON) O DESACTIVADAS (OFF)
 local OpcionesDisponibles = {
-    AutoTP = true,  -- true = disponible, false = bloqueada
+    AutoTP = true,
 }
 
 -- ============================================
--- 📍 POSICIÓN DEL AUTO TP (CAMBIA ESTOS VALORES)
--- 🔥 La Y se ajusta automáticamente con HeightOffset
+-- 📍 POSICIÓN DEL AUTO TP
 -- ============================================
 local TPPosition = {
     X = -5931.02,
-    Y = 373.07,   -- Se le sumará HeightOffset automáticamente
+    Y = 373.07,
     Z = -1428.69
 }
 
--- 🔥 Ajuste de altura (subir/bajar el TP)
--- Valor positivo = sube, valor negativo = baja
-local HeightOffset = 2  -- Cambia este valor para ajustar la altura
+local HeightOffset = 2
 
 -- ============================================
 -- ═══════════════════════════════════════════
---            CONFIGURACIÓN VISUAL
+--            CONFIGURACIÓN VISUAL PREMIUM
 -- ═══════════════════════════════════════════
 -- ============================================
 
 -- ============================================
--- 🎨 COLORES (Cambia los valores RGB)
+-- 🎨 COLORES PREMIUM (Cambia los valores RGB)
 -- ============================================
 local Colors = {
-    Background = Color3.fromRGB(20, 20, 45),
-    Header = Color3.fromRGB(35, 30, 70),
+    -- Colores principales
+    Background = Color3.fromRGB(10, 10, 30),
+    Header = Color3.fromRGB(25, 20, 60),
     Title = Color3.fromRGB(255, 200, 100),
-    SubTitle = Color3.fromRGB(160, 160, 210),
-    Border = Color3.fromRGB(80, 60, 200),
-    ToggleOn = Color3.fromRGB(0, 200, 100),
-    ToggleOff = Color3.fromRGB(60, 60, 80),
-    ToggleTextOn = Color3.fromRGB(100, 255, 100),
-    ToggleTextOff = Color3.fromRGB(255, 100, 100),
-    FrameBG = Color3.fromRGB(30, 30, 60),
-    FrameBGOn = Color3.fromRGB(30, 55, 40),
-    Stroke = Color3.fromRGB(80, 60, 200),
-    StrokeOn = Color3.fromRGB(0, 200, 100),
-    ButtonDestroy = Color3.fromRGB(200, 40, 40),
+    SubTitle = Color3.fromRGB(180, 180, 220),
+    Border = Color3.fromRGB(120, 80, 255),
+    BorderGlow = Color3.fromRGB(200, 150, 255),
+    
+    -- Toggles
+    ToggleOn = Color3.fromRGB(0, 220, 120),
+    ToggleOff = Color3.fromRGB(50, 50, 70),
+    ToggleTextOn = Color3.fromRGB(150, 255, 200),
+    ToggleTextOff = Color3.fromRGB(200, 100, 100),
+    
+    -- Frames
+    FrameBG = Color3.fromRGB(20, 20, 50),
+    FrameBGOn = Color3.fromRGB(20, 50, 35),
+    FrameBGBlocked = Color3.fromRGB(40, 20, 20),
+    Stroke = Color3.fromRGB(100, 70, 220),
+    StrokeOn = Color3.fromRGB(0, 220, 120),
+    StrokeBlocked = Color3.fromRGB(220, 50, 50),
+    
+    -- Botones
+    ButtonDestroy = Color3.fromRGB(200, 30, 30),
     ButtonDestroyHover = Color3.fromRGB(255, 50, 50),
-    CloseBtn = Color3.fromRGB(50, 40, 80),
+    CloseBtn = Color3.fromRGB(40, 30, 70),
     CloseBtnHover = Color3.fromRGB(200, 40, 40),
+    
+    -- Textos
     IconColor = Color3.fromRGB(255, 255, 255),
     TextColor = Color3.fromRGB(255, 255, 255),
-    DescColor = Color3.fromRGB(150, 150, 200),
+    DescColor = Color3.fromRGB(160, 160, 210),
+    BlockedText = Color3.fromRGB(255, 80, 80),
+    
+    -- Efectos especiales
+    GlowColor = Color3.fromRGB(150, 100, 255),
+    AccentColor = Color3.fromRGB(255, 180, 80),
 }
 
 -- ============================================
--- 📏 TAMAÑOS (Cambia los números)
+-- ✨ EFECTOS VISUALES (Cambia los valores)
+-- ============================================
+local Effects = {
+    GlowIntensity = 0.3,      -- Intensidad del brillo (0-1)
+    ShadowSize = 20,          -- Tamaño de la sombra
+    CornerRadius = 24,        -- Esquinas redondeadas
+    BorderGlow = true,        -- Brillo en el borde
+    ParticleEffect = true,    -- Efecto de partículas en el botón
+    RainbowTitle = false,     -- Título arcoíris
+}
+
+-- ============================================
+-- 📏 TAMAÑOS PREMIUM (Cambia los números)
 -- ============================================
 local Sizes = {
-    PanelWidth = 350,
-    PanelHeight = 200,
-    PanelCorner = 20,
-    FloatButtonSize = 60,
+    PanelWidth = 420,
+    PanelHeight = 250,
+    PanelCorner = 24,
+    FloatButtonSize = 70,
     FloatButtonCorner = 1,
-    HeaderHeight = 55,
-    HeaderCorner = 20,
-    TitleSize = 18,
-    SubTitleSize = 11,
-    ToggleHeight = 55,
-    ToggleCorner = 10,
-    ToggleStroke = 1.5,
-    ToggleBtnWidth = 50,
-    ToggleBtnHeight = 28,
-    ToggleBtnCorner = 6,
-    IconSize = 32,
-    IconTextSize = 22,
-    LabelSize = 13,
-    DescSize = 10,
-    DestroyHeight = 32,
-    DestroyCorner = 10,
-    ScrollThickness = 4,
-    ScrollPadding = 20,
+    HeaderHeight = 65,
+    HeaderCorner = 24,
+    TitleSize = 22,
+    SubTitleSize = 13,
+    ToggleHeight = 60,
+    ToggleCorner = 12,
+    ToggleStroke = 2,
+    ToggleBtnWidth = 55,
+    ToggleBtnHeight = 32,
+    ToggleBtnCorner = 8,
+    IconSize = 38,
+    IconTextSize = 26,
+    LabelSize = 15,
+    DescSize = 11,
+    DestroyHeight = 38,
+    DestroyCorner = 12,
+    ScrollThickness = 5,
+    ScrollPadding = 25,
+    ShadowBlur = 30,
 }
 
 -- ============================================
 -- 📍 POSICIONES (Cambia las coordenadas)
 -- ============================================
 local Positions = {
-    FloatButton = {X = 1, Y = 0, OffsetX = -75, OffsetY = 15},
-    Panel = {X = 0.5, Y = 0.5, OffsetX = -175, OffsetY = -100},
-    HeaderText = {X = 15, Y = 0},
-    SubHeaderText = {X = 15, Y = 32},
-    CloseBtn = {X = 1, Y = 0.5, OffsetX = -40, OffsetY = -17},
+    FloatButton = {X = 1, Y = 0, OffsetX = -85, OffsetY = 20},
+    Panel = {X = 0.5, Y = 0.5, OffsetX = -210, OffsetY = -125},
+    HeaderText = {X = 20, Y = 0},
+    SubHeaderText = {X = 20, Y = 38},
+    CloseBtn = {X = 1, Y = 0.5, OffsetX = -45, OffsetY = -18},
 }
 
 -- ============================================
--- 📝 TEXTOS (Cambia los strings)
+-- 📝 TEXTOS PREMIUM (Cambia los strings)
 -- ============================================
 local Texts = {
-    Title = "+1 PEED FROM SPEED BUBBLES",
-    SubTitle = "EL MEJOR SCRIPR AUTO FARM",
-    FloatButton = "📍",
-    DestroyButton = "🗑️ DESTRUIR GUI",
+    Title = "+1 SCAPE FROM SPEED BUBBLES",
+    SubTitle = "✦ TELEPORT PREMIUM ✦",
+    FloatButton = "✦",
+    DestroyButton = "🗑️ DESTROY GUI",
     CloseButton = "✕",
     
     Option1 = "AUTO TELEPORT",
-    Option1Desc = "TP a X: -5931.02, Y: 373.07, Z: -1428.69",
+    Option1Desc = "📍 TP a posición guardada",
     Option1Icon = "📍",
 }
 
 -- ============================================
--- 🔤 FUENTES (Cambia Enum.Font)
+-- 🔤 FUENTES PREMIUM (Cambia Enum.Font)
 -- ============================================
 local Fonts = {
-    Title = Enum.Font.GothamBold,
-    SubTitle = Enum.Font.Gotham,
-    FloatButton = Enum.Font.GothamBold,
+    Title = Enum.Font.GothamBlack,
+    SubTitle = Enum.Font.GothamMedium,
+    FloatButton = Enum.Font.GothamBlack,
     Label = Enum.Font.GothamBold,
-    Desc = Enum.Font.Gotham,
+    Desc = Enum.Font.GothamMedium,
     Toggle = Enum.Font.GothamBold,
     Destroy = Enum.Font.GothamBold,
     Close = Enum.Font.GothamBold,
@@ -154,13 +182,15 @@ local Fonts = {
 }
 
 -- ============================================
--- ⏱️ ANIMACIONES (Cambia la duración en segundos)
+-- ⏱️ ANIMACIONES PREMIUM (Cambia la duración)
 -- ============================================
 local Animations = {
-    OpenDuration = 0.5,
+    OpenDuration = 0.6,
     CloseDuration = 0.4,
-    ToggleDuration = 0.3,
+    ToggleDuration = 0.35,
     HoverDuration = 0.2,
+    FloatPulse = 2.0,
+    GlowPulse = 1.5,
 }
 
 -- ============================================
@@ -170,16 +200,18 @@ local Animations = {
 -- ============================================
 
 -- ============================================
--- CONFIGURACIÓN DE OPCIONES (NO TOCAR)
+-- CONFIGURACIÓN DE OPCIONES
 -- ============================================
 local Settings = {
     AutoTP = false,
 }
 
 local TPLoop = nil
+local FloatPulseConnection = nil
+local GlowConnection = nil
 
 -- ============================================
--- FUNCIONES DE UTILIDAD (NO TOCAR)
+-- FUNCIONES DE UTILIDAD
 -- ============================================
 local function GetCharacter()
     local char = LocalPlayer.Character
@@ -195,7 +227,7 @@ local function GetHRP()
 end
 
 -- ============================================
--- 🔥 AUTO TP A POSICIÓN CON AJUSTE DE ALTURA
+-- 🔥 AUTO TP
 -- ============================================
 local function GetTargetPosition()
     return Vector3.new(
@@ -207,7 +239,7 @@ end
 
 local function ToggleAutoTP()
     if not OpcionesDisponibles.AutoTP then
-        print("❌ Auto TP está DESACTIVADO en la configuración")
+        print("❌ Auto TP DESACTIVADO")
         return
     end
     
@@ -216,14 +248,12 @@ local function ToggleAutoTP()
     if Settings.AutoTP then
         local targetPos = GetTargetPosition()
         print("📍 Auto TP ACTIVADO")
-        print("📍 Posición: X=" .. targetPos.X .. ", Y=" .. targetPos.Y .. ", Z=" .. targetPos.Z)
         
         local hrp = GetHRP()
         if hrp then
             pcall(function()
                 hrp.CFrame = CFrame.new(targetPos)
                 hrp.Velocity = Vector3.new(0, 0, 0)
-                print("✅ Teletransportado")
             end)
         end
         
@@ -238,8 +268,7 @@ local function ToggleAutoTP()
             if not hrp then return end
             
             local targetPos2 = GetTargetPosition()
-            local currentPos = hrp.Position
-            local distance = (currentPos - targetPos2).Magnitude
+            local distance = (hrp.Position - targetPos2).Magnitude
             
             if distance > 3 then
                 pcall(function()
@@ -258,10 +287,12 @@ local function ToggleAutoTP()
 end
 
 -- ============================================
--- DESTROY GUI (NO TOCAR)
+-- DESTROY GUI
 -- ============================================
 local function DestroyGUI()
     if TPLoop then pcall(function() TPLoop:Disconnect() end) TPLoop = nil end
+    if FloatPulseConnection then pcall(function() FloatPulseConnection:Disconnect() end) FloatPulseConnection = nil end
+    if GlowConnection then pcall(function() GlowConnection:Disconnect() end) GlowConnection = nil end
     
     pcall(function()
         local gui = PlayerGui:FindFirstChild("AutoTPProGUI")
@@ -272,7 +303,7 @@ local function DestroyGUI()
 end
 
 -- ============================================
--- CREAR GUI (NO TOCAR)
+-- CREAR GUI PREMIUM
 -- ============================================
 local function CreateGUI()
     pcall(function()
@@ -286,15 +317,17 @@ local function CreateGUI()
     screenGui.Parent = PlayerGui
     screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
     
-    -- Botón flotante
+    -- ==========================================
+    -- BOTÓN FLOTANTE PREMIUM
+    -- ==========================================
     local toggleButton = Instance.new("TextButton")
     toggleButton.Size = UDim2.new(0, Sizes.FloatButtonSize, 0, Sizes.FloatButtonSize)
     toggleButton.Position = UDim2.new(Positions.FloatButton.X, Positions.FloatButton.OffsetX, Positions.FloatButton.Y, Positions.FloatButton.OffsetY)
     toggleButton.BackgroundColor3 = Colors.Background
     toggleButton.Text = Texts.FloatButton
-    toggleButton.TextColor3 = Colors.TextColor
+    toggleButton.TextColor3 = Colors.Title
     toggleButton.Font = Fonts.FloatButton
-    toggleButton.TextSize = 28
+    toggleButton.TextSize = 34
     toggleButton.Parent = screenGui
     toggleButton.ZIndex = 999
     
@@ -302,7 +335,37 @@ local function CreateGUI()
     btnCorner.CornerRadius = UDim.new(Sizes.FloatButtonCorner, 0)
     btnCorner.Parent = toggleButton
     
-    -- Panel
+    -- Sombra del botón
+    local btnShadow = Instance.new("ImageLabel")
+    btnShadow.Size = UDim2.new(1.3, 0, 1.3, 0)
+    btnShadow.Position = UDim2.new(-0.15, 0, -0.15, 0)
+    btnShadow.BackgroundTransparency = 1
+    btnShadow.Image = "rbxassetid://13130321673"
+    btnShadow.ImageTransparency = 0.6
+    btnShadow.ZIndex = 998
+    btnShadow.Parent = toggleButton
+    
+    -- Glow del botón
+    local btnGlow = Instance.new("ImageLabel")
+    btnGlow.Size = UDim2.new(1.8, 0, 1.8, 0)
+    btnGlow.Position = UDim2.new(-0.4, 0, -0.4, 0)
+    btnGlow.BackgroundTransparency = 1
+    btnGlow.Image = "rbxassetid://13130321673"
+    btnGlow.ImageColor3 = Colors.BorderGlow
+    btnGlow.ImageTransparency = 0.7
+    btnGlow.ZIndex = 997
+    btnGlow.Parent = toggleButton
+    
+    -- Borde brillante
+    local btnStroke = Instance.new("UIStroke")
+    btnStroke.Color = Colors.Border
+    btnStroke.Thickness = 2.5
+    btnStroke.Transparency = 0.3
+    btnStroke.Parent = toggleButton
+    
+    -- ==========================================
+    -- PANEL PRINCIPAL PREMIUM
+    -- ==========================================
     local panel = Instance.new("Frame")
     panel.Name = "MainPanel"
     panel.Size = UDim2.new(0, 0, 0, 0)
@@ -318,13 +381,33 @@ local function CreateGUI()
     panelCorner.CornerRadius = UDim.new(0, Sizes.PanelCorner)
     panelCorner.Parent = panel
     
+    -- Panel Shadow
+    local panelShadow = Instance.new("ImageLabel")
+    panelShadow.Size = UDim2.new(1.1, 20, 1.1, 20)
+    panelShadow.Position = UDim2.new(-0.05, -10, -0.05, -10)
+    panelShadow.BackgroundTransparency = 1
+    panelShadow.Image = "rbxassetid://13130321673"
+    panelShadow.ImageTransparency = 0.5
+    panelShadow.ZIndex = 99
+    panelShadow.Parent = panel
+    
+    -- Panel Stroke Premium
     local panelStroke = Instance.new("UIStroke")
     panelStroke.Color = Colors.Border
-    panelStroke.Thickness = 2
-    panelStroke.Transparency = 0.4
+    panelStroke.Thickness = 2.5
+    panelStroke.Transparency = 0.3
     panelStroke.Parent = panel
     
-    -- Header
+    -- Panel Glow
+    local panelGlow = Instance.new("UIStroke")
+    panelGlow.Color = Colors.BorderGlow
+    panelGlow.Thickness = 4
+    panelGlow.Transparency = 0.5
+    panelGlow.Parent = panel
+    
+    -- ==========================================
+    -- HEADER PREMIUM
+    -- ==========================================
     local header = Instance.new("Frame")
     header.Size = UDim2.new(1, 0, 0, Sizes.HeaderHeight)
     header.BackgroundColor3 = Colors.Header
@@ -334,9 +417,17 @@ local function CreateGUI()
     headerCorner.CornerRadius = UDim.new(0, Sizes.HeaderCorner)
     headerCorner.Parent = header
     
+    -- Línea decorativa
+    local headerLine = Instance.new("Frame")
+    headerLine.Size = UDim2.new(1, -40, 0, 2.5)
+    headerLine.Position = UDim2.new(0, 20, 1, -3)
+    headerLine.BackgroundColor3 = Colors.Border
+    headerLine.BackgroundTransparency = 0.5
+    headerLine.Parent = header
+    
     -- Título
     local titleText = Instance.new("TextLabel")
-    titleText.Size = UDim2.new(1, -70, 1, 0)
+    titleText.Size = UDim2.new(1, -80, 1, 0)
     titleText.Position = UDim2.new(0, Positions.HeaderText.X, 0, Positions.HeaderText.Y)
     titleText.BackgroundTransparency = 1
     titleText.Text = Texts.Title
@@ -348,7 +439,7 @@ local function CreateGUI()
     
     -- Subtítulo
     local subText = Instance.new("TextLabel")
-    subText.Size = UDim2.new(1, -70, 0, 16)
+    subText.Size = UDim2.new(1, -80, 0, 18)
     subText.Position = UDim2.new(0, Positions.SubHeaderText.X, 0, Positions.SubHeaderText.Y)
     subText.BackgroundTransparency = 1
     subText.Text = Texts.SubTitle
@@ -360,18 +451,18 @@ local function CreateGUI()
     
     -- Botón cerrar
     local closeBtn = Instance.new("TextButton")
-    closeBtn.Size = UDim2.new(0, 32, 0, 32)
+    closeBtn.Size = UDim2.new(0, 36, 0, 36)
     closeBtn.Position = UDim2.new(Positions.CloseBtn.X, Positions.CloseBtn.OffsetX, Positions.CloseBtn.Y, Positions.CloseBtn.OffsetY)
     closeBtn.BackgroundColor3 = Colors.CloseBtn
     closeBtn.Text = Texts.CloseButton
     closeBtn.TextColor3 = Colors.TextColor
     closeBtn.Font = Fonts.Close
-    closeBtn.TextSize = 18
+    closeBtn.TextSize = 20
     closeBtn.AutoButtonColor = false
     closeBtn.Parent = header
     
     local closeCorner = Instance.new("UICorner")
-    closeCorner.CornerRadius = UDim.new(0, 10)
+    closeCorner.CornerRadius = UDim.new(0, 12)
     closeCorner.Parent = closeBtn
     
     closeBtn.MouseEnter:Connect(function()
@@ -390,27 +481,32 @@ local function CreateGUI()
         end)
     end)
     
-    -- Scrolling Frame
+    -- ==========================================
+    -- SCROLLING FRAME
+    -- ==========================================
     local scrollFrame = Instance.new("ScrollingFrame")
-    scrollFrame.Size = UDim2.new(1, -Sizes.ScrollPadding, 1, -Sizes.HeaderHeight - 25)
-    scrollFrame.Position = UDim2.new(0, Sizes.ScrollPadding/2, 0, Sizes.HeaderHeight + 10)
+    scrollFrame.Size = UDim2.new(1, -Sizes.ScrollPadding, 1, -Sizes.HeaderHeight - 30)
+    scrollFrame.Position = UDim2.new(0, Sizes.ScrollPadding/2, 0, Sizes.HeaderHeight + 15)
     scrollFrame.BackgroundTransparency = 1
     scrollFrame.BorderSizePixel = 0
     scrollFrame.ScrollBarThickness = Sizes.ScrollThickness
+    scrollFrame.ScrollBarImageColor3 = Colors.Border
     scrollFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
     scrollFrame.AutomaticCanvasSize = Enum.AutomaticSize.Y
     scrollFrame.Parent = panel
     
     local layout = Instance.new("UIListLayout")
-    layout.Padding = UDim.new(0, 8)
+    layout.Padding = UDim.new(0, 10)
     layout.SortOrder = Enum.SortOrder.LayoutOrder
     layout.Parent = scrollFrame
     
-    -- Función para crear toggle
+    -- ==========================================
+    -- TOGGLE PREMIUM
+    -- ==========================================
     local function CreateToggle(labelText, toggleFunc, icon, desc, isAvailable)
         local frame = Instance.new("Frame")
         frame.Size = UDim2.new(1, 0, 0, Sizes.ToggleHeight)
-        frame.BackgroundColor3 = isAvailable and Colors.FrameBG or Color3.fromRGB(40, 30, 30)
+        frame.BackgroundColor3 = isAvailable and Colors.FrameBG or Colors.FrameBGBlocked
         frame.BackgroundTransparency = isAvailable and 0.2 or 0.1
         frame.Parent = scrollFrame
         
@@ -419,7 +515,7 @@ local function CreateGUI()
         fCorner.Parent = frame
         
         local fStroke = Instance.new("UIStroke")
-        fStroke.Color = isAvailable and Colors.Stroke or Color3.fromRGB(200, 50, 50)
+        fStroke.Color = isAvailable and Colors.Stroke or Colors.StrokeBlocked
         fStroke.Thickness = Sizes.ToggleStroke
         fStroke.Transparency = isAvailable and 0.5 or 0.3
         fStroke.Parent = frame
@@ -427,7 +523,7 @@ local function CreateGUI()
         -- Icono
         local iconLabel = Instance.new("TextLabel")
         iconLabel.Size = UDim2.new(0, Sizes.IconSize, 0, Sizes.IconSize)
-        iconLabel.Position = UDim2.new(0, 10, 0.5, -Sizes.IconSize/2)
+        iconLabel.Position = UDim2.new(0, 12, 0.5, -Sizes.IconSize/2)
         iconLabel.BackgroundTransparency = 1
         iconLabel.Text = icon
         iconLabel.TextColor3 = Colors.IconColor
@@ -437,11 +533,11 @@ local function CreateGUI()
         
         -- Label
         local label = Instance.new("TextLabel")
-        label.Size = UDim2.new(1, -120, 0, 18)
-        label.Position = UDim2.new(0, 48, 0, 4)
+        label.Size = UDim2.new(1, -130, 0, 20)
+        label.Position = UDim2.new(0, 54, 0, 5)
         label.BackgroundTransparency = 1
         label.Text = labelText
-        label.TextColor3 = isAvailable and Colors.TextColor or Color3.fromRGB(255, 80, 80)
+        label.TextColor3 = isAvailable and Colors.TextColor or Colors.BlockedText
         label.Font = Fonts.Label
         label.TextSize = Sizes.LabelSize
         label.TextXAlignment = Enum.TextXAlignment.Left
@@ -450,26 +546,26 @@ local function CreateGUI()
         -- Descripción
         if desc then
             local dLabel = Instance.new("TextLabel")
-            dLabel.Size = UDim2.new(1, -120, 0, 14)
-            dLabel.Position = UDim2.new(0, 48, 0, 24)
+            dLabel.Size = UDim2.new(1, -130, 0, 16)
+            dLabel.Position = UDim2.new(0, 54, 0, 27)
             dLabel.BackgroundTransparency = 1
             dLabel.Text = desc
-            dLabel.TextColor3 = isAvailable and Colors.DescColor or Color3.fromRGB(255, 80, 80)
+            dLabel.TextColor3 = isAvailable and Colors.DescColor or Colors.BlockedText
             dLabel.Font = Fonts.Desc
             dLabel.TextSize = Sizes.DescSize
             dLabel.TextXAlignment = Enum.TextXAlignment.Left
             dLabel.Parent = frame
         end
         
-        -- Toggle Button
+        -- Toggle Button Premium
         local toggleBtn = Instance.new("TextButton")
         toggleBtn.Size = UDim2.new(0, Sizes.ToggleBtnWidth, 0, Sizes.ToggleBtnHeight)
-        toggleBtn.Position = UDim2.new(1, -(Sizes.ToggleBtnWidth + 8), 0.5, -Sizes.ToggleBtnHeight/2)
+        toggleBtn.Position = UDim2.new(1, -(Sizes.ToggleBtnWidth + 10), 0.5, -Sizes.ToggleBtnHeight/2)
         toggleBtn.BackgroundColor3 = isAvailable and Colors.ToggleOff or Color3.fromRGB(40, 40, 50)
         toggleBtn.TextColor3 = isAvailable and Colors.ToggleTextOff or Color3.fromRGB(100, 100, 120)
         toggleBtn.Text = "OFF"
         toggleBtn.Font = Fonts.Toggle
-        toggleBtn.TextSize = 11
+        toggleBtn.TextSize = 12
         toggleBtn.AutoButtonColor = false
         toggleBtn.Parent = frame
         
@@ -481,7 +577,7 @@ local function CreateGUI()
         
         toggleBtn.MouseButton1Click:Connect(function()
             if not isAvailable then
-                print("❌ Esta opción está DESACTIVADA en la configuración")
+                print("❌ Opción DESACTIVADA")
                 return
             end
             
@@ -525,15 +621,17 @@ local function CreateGUI()
     -- Crear toggle
     CreateToggle(Texts.Option1, ToggleAutoTP, Texts.Option1Icon, Texts.Option1Desc, OpcionesDisponibles.AutoTP)
     
-    -- Botón Destroy
+    -- ==========================================
+    -- BOTÓN DESTROY PREMIUM
+    -- ==========================================
     local destroyBtn = Instance.new("TextButton")
     destroyBtn.Size = UDim2.new(1, 0, 0, Sizes.DestroyHeight)
-    destroyBtn.Position = UDim2.new(0, 0, 1, -(Sizes.DestroyHeight + 5))
+    destroyBtn.Position = UDim2.new(0, 0, 1, -(Sizes.DestroyHeight + 8))
     destroyBtn.BackgroundColor3 = Colors.ButtonDestroy
     destroyBtn.Text = Texts.DestroyButton
     destroyBtn.TextColor3 = Colors.TextColor
     destroyBtn.Font = Fonts.Destroy
-    destroyBtn.TextSize = 12
+    destroyBtn.TextSize = 13
     destroyBtn.Parent = scrollFrame
     
     local destroyCorner = Instance.new("UICorner")
@@ -560,7 +658,9 @@ local function CreateGUI()
         DestroyGUI()
     end)
     
-    -- Animaciones del panel
+    -- ==========================================
+    -- ANIMACIONES PREMIUM
+    -- ==========================================
     local panelOpen = false
     local openTween = TweenService:Create(panel, TweenInfo.new(Animations.OpenDuration, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
         Size = UDim2.new(0, Sizes.PanelWidth, 0, Sizes.PanelHeight),
@@ -594,7 +694,9 @@ local function CreateGUI()
         end)
     end)
     
-    -- Arrastrable
+    -- ==========================================
+    -- ARRASTRABLE
+    -- ==========================================
     local dragging = false
     local dragStart = nil
     local startPos = nil
@@ -625,14 +727,30 @@ local function CreateGUI()
         end
     end)
     
+    -- ==========================================
+    -- EFECTO DE PULSACIÓN EN EL BOTÓN
+    -- ==========================================
+    local pulseDirection = 1
+    FloatPulseConnection = RunService.Heartbeat:Connect(function()
+        if not toggleButton or not toggleButton.Parent then return end
+        
+        local scale = 1 + 0.03 * math.sin(tick() * 1.5)
+        TweenService:Create(toggleButton, TweenInfo.new(0.1), {
+            Size = UDim2.new(0, Sizes.FloatButtonSize * scale, 0, Sizes.FloatButtonSize * scale)
+        }):Play()
+    end)
+    
+    -- ==========================================
+    -- MENSAJE DE CARGA
+    -- ==========================================
     local targetPos = GetTargetPosition()
     print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-    print("📍 AUTO TP PRO CARGADO")
+    print("🔥 AUTO TP PRO ULTRA CARGADO")
     print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
     print("📍 TP a: X=" .. targetPos.X .. ", Y=" .. targetPos.Y .. ", Z=" .. targetPos.Z)
     print("📏 Ajuste de altura: +" .. HeightOffset .. " studs")
     print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-    print("📋 Presiona 📍 para abrir el panel")
+    print("📋 Presiona ✦ para abrir el panel")
     print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
 end
 
