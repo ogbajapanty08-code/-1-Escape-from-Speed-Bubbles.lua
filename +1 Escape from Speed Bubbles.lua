@@ -138,7 +138,7 @@ local Texts = {
     Option4Icon = "🔄",
     
     Option5 = "SPEED MULTIPLIER",
-    Option5Desc = "💨 Multiplica la velocidad ganada x1000",
+    Option5Desc = "💨 Multiplica la velocidad ganada x20",
     Option5Icon = "💨",
 }
 
@@ -176,7 +176,7 @@ local Animations = {
 -- ============================================
 -- CONFIGURACIÓN SPEED MULTIPLIER
 -- ============================================
-local SPEED_MULTIPLIER = 1000  -- 🔥 CAMBIA ESTE VALOR (ej: 5, 10, 50, 100)
+local SPEED_MULTIPLIER = 20  -- 🔥 CAMBIA ESTE VALOR (ej: 5, 10, 50, 100)
 
 -- ============================================
 -- REMOTES DEL JUEGO (NO TOCAR)
