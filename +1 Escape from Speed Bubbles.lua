@@ -1,6 +1,6 @@
 --[[
     🏄 +1 SCAPE FROM SPEED BUBBLES - CON SPEED MULTIPLIER
-    SOLO 5 OPCIONES QUE FUNCIONAN
+    SOLO 6 OPCIONES QUE FUNCIONAN
 ]]
 
 local Players = game:GetService("Players")
@@ -9,177 +9,34 @@ local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Lighting = game:GetService("Lighting")
+local Debris = game:GetService("Debris")
 
 local LocalPlayer = Players.LocalPlayer
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 
 -- ============================================
--- ═══════════════════════════════════════════
---       CONFIGURACIÓN DE OPCIONES ON/OFF
--- ═══════════════════════════════════════════
+-- 📍 POSICIONES DE AUTO TP
 -- ============================================
 
-local OpcionesDisponibles = {
-    AutoTP = true,
-    Invisible = true,
-    AutoFarm = true,
-    AutoRebirth = true,
-    SpeedMultiplier = true,
-}
-
--- ============================================
--- 📍 POSICIÓN DEL AUTO TP (CAMBIA ESTOS VALORES)
--- ============================================
-local TPPosition = {
+local TPPositionMundo1 = {
     X = -5931.02,
     Y = 373.07,
     Z = -1428.69
 }
 
+local TPPositionMundo2 = {
+    X = -3249.37,
+    Y = 164.89,
+    Z = -104.36
+}
+
+local TPPosition = TPPositionMundo1
 local HeightOffset = 2.5
+local CurrentMundo = 1
 
 -- ============================================
--- ═══════════════════════════════════════════
---            CONFIGURACIÓN VISUAL
--- ═══════════════════════════════════════════
--- ============================================
-
--- ============================================
--- 🎨 COLORES (Cambia los valores RGB)
--- ============================================
-local Colors = {
-    Background = Color3.fromRGB(10, 10, 30),
-    Header = Color3.fromRGB(25, 20, 60),
-    Title = Color3.fromRGB(255, 200, 100),
-    SubTitle = Color3.fromRGB(180, 180, 220),
-    Border = Color3.fromRGB(120, 80, 255),
-    BorderGlow = Color3.fromRGB(200, 150, 255),
-    ToggleOn = Color3.fromRGB(0, 220, 120),
-    ToggleOff = Color3.fromRGB(60, 60, 80),
-    ToggleTextOn = Color3.fromRGB(150, 255, 200),
-    ToggleTextOff = Color3.fromRGB(255, 100, 100),
-    FrameBG = Color3.fromRGB(20, 20, 50),
-    FrameBGOn = Color3.fromRGB(20, 50, 35),
-    Stroke = Color3.fromRGB(100, 70, 220),
-    StrokeOn = Color3.fromRGB(0, 220, 120),
-    ButtonDestroy = Color3.fromRGB(200, 30, 30),
-    ButtonDestroyHover = Color3.fromRGB(255, 50, 50),
-    CloseBtn = Color3.fromRGB(40, 30, 70),
-    CloseBtnHover = Color3.fromRGB(200, 40, 40),
-    IconColor = Color3.fromRGB(255, 255, 255),
-    TextColor = Color3.fromRGB(255, 255, 255),
-    DescColor = Color3.fromRGB(160, 160, 210),
-    FloatButtonColor = Color3.fromRGB(255, 200, 50),
-    FloatButtonText = Color3.fromRGB(0, 0, 0),
-}
-
--- ============================================
--- 📏 TAMAÑOS (Cambia los números)
--- ============================================
-local Sizes = {
-    PanelWidth = 380,
-    PanelHeight = 320,
-    PanelCorner = 24,
-    FloatButtonSize = 75,
-    FloatButtonCorner = 1,
-    HeaderHeight = 50,
-    HeaderCorner = 24,
-    TitleSize = 18,
-    SubTitleSize = 0,
-    ToggleHeight = 48,
-    ToggleCorner = 8,
-    ToggleStroke = 1.5,
-    ToggleBtnWidth = 50,
-    ToggleBtnHeight = 26,
-    ToggleBtnCorner = 5,
-    IconSize = 30,
-    IconTextSize = 20,
-    LabelSize = 13,
-    DescSize = 9,
-    DestroyHeight = 32,
-    DestroyCorner = 8,
-    ScrollThickness = 4,
-    ScrollPadding = 20,
-}
-
--- ============================================
--- 📍 POSICIONES (Cambia las coordenadas)
--- ============================================
-local Positions = {
-    FloatButton = {X = 1, Y = 0, OffsetX = -90, OffsetY = 20},
-    Panel = {X = 0.5, Y = 0.5, OffsetX = -190, OffsetY = -160},
-    HeaderText = {X = 15, Y = 0},
-    CloseBtn = {X = 1, Y = 0.5, OffsetX = -42, OffsetY = -17},
-}
-
--- ============================================
--- 📝 TEXTOS (Cambia los strings)
--- ============================================
-local Texts = {
-    Title = "🏄 +1 SCAPE FROM SPEED BUBBLES",
-    FloatButton = "🏄",
-    DestroyButton = "🗑️ DESTROY GUI",
-    CloseButton = "✕",
-    
-    Option1 = "AUTO TELEPORT",
-    Option1Desc = "📍 TP a posición guardada",
-    Option1Icon = "📍",
-    
-    Option2 = "INVISIBLE",
-    Option2Desc = "👻 Invisible para otros jugadores",
-    Option2Icon = "👻",
-    
-    Option3 = "AUTO-FARM SPEED",
-    Option3Desc = "⚡ Gana velocidad automáticamente",
-    Option3Icon = "⚡",
-    
-    Option4 = "AUTO-REBIRTH",
-    Option4Desc = "🔄 Rebirth automático al nivel requerido",
-    Option4Icon = "🔄",
-    
-    Option5 = "SPEED MULTIPLIER",
-    Option5Desc = "💨 Multiplica la velocidad ganada x20",
-    Option5Icon = "💨",
-}
-
--- ============================================
--- 🔤 FUENTES (Cambia Enum.Font)
--- ============================================
-local Fonts = {
-    Title = Enum.Font.GothamBlack,
-    FloatButton = Enum.Font.GothamBlack,
-    Label = Enum.Font.GothamBold,
-    Desc = Enum.Font.GothamMedium,
-    Toggle = Enum.Font.GothamBold,
-    Destroy = Enum.Font.GothamBold,
-    Close = Enum.Font.GothamBold,
-    Icon = Enum.Font.Gotham,
-}
-
--- ============================================
--- ⏱️ ANIMACIONES (Cambia la duración en segundos)
--- ============================================
-local Animations = {
-    OpenDuration = 0.5,
-    CloseDuration = 0.4,
-    ToggleDuration = 0.3,
-    HoverDuration = 0.2,
-    FloatPulse = 2.0,
-}
-
--- ============================================
--- ═══════════════════════════════════════════
---           FIN CONFIGURACIÓN VISUAL
--- ═══════════════════════════════════════════
--- ============================================
-
--- ============================================
--- CONFIGURACIÓN SPEED MULTIPLIER
--- ============================================
-local SPEED_MULTIPLIER = 20  -- 🔥 CAMBIA ESTE VALOR (ej: 5, 10, 50, 100)
-
--- ============================================
--- REMOTES DEL JUEGO (NO TOCAR)
+-- REMOTES
 -- ============================================
 local AddSpeed = nil
 local RequestRebirth = nil
@@ -190,16 +47,12 @@ local function FindRemotes()
         AddSpeed = events:FindFirstChild("AddSpeed")
         RequestRebirth = events:FindFirstChild("RequestRebirth")
     end
-    
     if not AddSpeed then AddSpeed = ReplicatedStorage:FindFirstChild("AddSpeed") end
     if not RequestRebirth then RequestRebirth = ReplicatedStorage:FindFirstChild("RequestRebirth") end
-    
-    print("✅ AddSpeed:", AddSpeed ~= nil)
-    print("✅ RequestRebirth:", RequestRebirth ~= nil)
 end
 
 -- ============================================
--- FUNCIONES (NO TOCAR)
+-- FUNCIONES
 -- ============================================
 local function GetCharacter()
     local char = LocalPlayer.Character
@@ -228,7 +81,7 @@ local function GetTargetPosition()
 end
 
 -- ============================================
--- ESTADO DE OPCIONES (NO TOCAR)
+-- ESTADO
 -- ============================================
 local Settings = {
     AutoTP = false,
@@ -236,6 +89,7 @@ local Settings = {
     AutoFarm = false,
     AutoRebirth = false,
     SpeedMultiplier = false,
+    LowPerformance = false,
 }
 
 local TPLoop = nil
@@ -245,14 +99,13 @@ local RebirthLoop = nil
 local SpeedMultiplierLoop = nil
 local FloatPulseConnection = nil
 local OriginalTransparency = {}
+local LowPerformanceConnection = nil
 
 -- ============================================
--- 🔥 AUTO TP (NO TOCAR)
+-- TOGGLES
 -- ============================================
 local function ToggleAutoTP()
-    if not OpcionesDisponibles.AutoTP then return end
     Settings.AutoTP = not Settings.AutoTP
-    
     if Settings.AutoTP then
         print("📍 Auto TP ACTIVADO")
         local hrp = GetHRP()
@@ -279,13 +132,8 @@ local function ToggleAutoTP()
     end
 end
 
--- ============================================
--- 🔥 INVISIBLE (NO TOCAR)
--- ============================================
 local function ToggleInvisible()
-    if not OpcionesDisponibles.Invisible then return end
     Settings.Invisible = not Settings.Invisible
-    
     if Settings.Invisible then
         print("👻 Invisible ACTIVADO")
         if InvisibleLoop then pcall(function() InvisibleLoop:Disconnect() end) InvisibleLoop = nil end
@@ -328,13 +176,8 @@ local function ToggleInvisible()
     end
 end
 
--- ============================================
--- 🔥 AUTO-FARM SPEED (NO TOCAR)
--- ============================================
 local function ToggleAutoFarm()
-    if not OpcionesDisponibles.AutoFarm then return end
     Settings.AutoFarm = not Settings.AutoFarm
-    
     if Settings.AutoFarm then
         if not AddSpeed then print("❌ AddSpeed no disponible") Settings.AutoFarm = false return end
         print("⚡ Auto-Farm Speed ACTIVADO")
@@ -349,13 +192,8 @@ local function ToggleAutoFarm()
     end
 end
 
--- ============================================
--- 🔥 AUTO-REBIRTH (NO TOCAR)
--- ============================================
 local function ToggleAutoRebirth()
-    if not OpcionesDisponibles.AutoRebirth then return end
     Settings.AutoRebirth = not Settings.AutoRebirth
-    
     if Settings.AutoRebirth then
         if not RequestRebirth then print("❌ RequestRebirth no disponible") Settings.AutoRebirth = false return end
         print("🔄 Auto-Rebirth ACTIVADO")
@@ -379,27 +217,16 @@ local function ToggleAutoRebirth()
     end
 end
 
--- ============================================
--- 🔥 SPEED MULTIPLIER (NUEVA OPCIÓN)
--- ============================================
 local function ToggleSpeedMultiplier()
-    if not OpcionesDisponibles.SpeedMultiplier then return end
     Settings.SpeedMultiplier = not Settings.SpeedMultiplier
-    
     if Settings.SpeedMultiplier then
         if not AddSpeed then print("❌ AddSpeed no disponible") Settings.SpeedMultiplier = false return end
-        print("💨 Speed Multiplier ACTIVADO (x" .. SPEED_MULTIPLIER .. ")")
-        
+        print("💨 Speed Multiplier ACTIVADO (x20)")
         if SpeedMultiplierLoop then pcall(function() SpeedMultiplierLoop:Disconnect() end) SpeedMultiplierLoop = nil end
-        
         SpeedMultiplierLoop = RunService.Heartbeat:Connect(function()
             if not Settings.SpeedMultiplier then return end
-            
-            -- Disparar AddSpeed múltiples veces para multiplicar la velocidad
-            for i = 1, SPEED_MULTIPLIER do
-                pcall(function()
-                    AddSpeed:FireServer()
-                end)
+            for i = 1, 20 do
+                pcall(function() AddSpeed:FireServer() end)
             end
         end)
     else
@@ -409,7 +236,143 @@ local function ToggleSpeedMultiplier()
 end
 
 -- ============================================
--- DESTROY GUI (NO TOCAR)
+-- LOW PERFORMANCE MODE
+-- ============================================
+local function ToggleLowPerformance()
+    Settings.LowPerformance = not Settings.LowPerformance
+    
+    if Settings.LowPerformance then
+        print("⚡ Low Performance Mode ACTIVADO")
+        
+        pcall(function()
+            Lighting.Brightness = 0.5
+            Lighting.Ambient = Color3.fromRGB(128, 128, 128)
+            Lighting.OutdoorAmbient = Color3.fromRGB(128, 128, 128)
+            Lighting.ShadowSoftness = 0
+            Lighting.GlobalShadows = false
+        end)
+        
+        pcall(function()
+            for _, v in ipairs(Workspace:GetDescendants()) do
+                if v:IsA("ParticleEmitter") or v:IsA("Trail") or v:IsA("Beam") or v:IsA("Smoke") or v:IsA("Fire") or v:IsA("Sparkles") then
+                    v.Enabled = false
+                    Debris:AddItem(v, 0.1)
+                end
+                if v:IsA("BasePart") then
+                    v.Material = Enum.Material.SmoothPlastic
+                    v.Reflectance = 0
+                end
+            end
+        end)
+        
+        pcall(function()
+            for _, v in ipairs(Workspace:GetDescendants()) do
+                if v:IsA("BasePart") then
+                    v.CastShadow = false
+                end
+            end
+        end)
+        
+        pcall(function()
+            for _, v in ipairs(Lighting:GetChildren()) do
+                if v:IsA("BlurEffect") or v:IsA("SunRaysEffect") or v:IsA("ColorCorrectionEffect") or v:IsA("BloomEffect") or v:IsA("DepthOfFieldEffect") then
+                    v.Enabled = false
+                end
+            end
+        end)
+        
+        if LowPerformanceConnection then
+            LowPerformanceConnection:Disconnect()
+            LowPerformanceConnection = nil
+        end
+        
+        LowPerformanceConnection = RunService.Heartbeat:Connect(function()
+            if not Settings.LowPerformance then return end
+            pcall(function()
+                for _, v in ipairs(Workspace:GetDescendants()) do
+                    if v:IsA("ParticleEmitter") or v:IsA("Trail") or v:IsA("Beam") then
+                        v.Enabled = false
+                    end
+                    if v:IsA("BasePart") and v.CastShadow == true then
+                        v.CastShadow = false
+                    end
+                end
+            end)
+        end)
+        
+    else
+        print("⚡ Low Performance Mode DESACTIVADO")
+        
+        pcall(function()
+            Lighting.Brightness = 1
+            Lighting.Ambient = Color3.fromRGB(0, 0, 0)
+            Lighting.OutdoorAmbient = Color3.fromRGB(0, 0, 0)
+            Lighting.ShadowSoftness = 0.5
+            Lighting.GlobalShadows = true
+        end)
+        
+        pcall(function()
+            for _, v in ipairs(Workspace:GetDescendants()) do
+                if v:IsA("ParticleEmitter") or v:IsA("Trail") or v:IsA("Beam") or v:IsA("Smoke") or v:IsA("Fire") or v:IsA("Sparkles") then
+                    v.Enabled = true
+                end
+                if v:IsA("BasePart") then
+                    v.Material = Enum.Material.Plastic
+                    v.CastShadow = true
+                end
+            end
+        end)
+        
+        pcall(function()
+            for _, v in ipairs(Lighting:GetChildren()) do
+                if v:IsA("BlurEffect") or v:IsA("SunRaysEffect") or v:IsA("ColorCorrectionEffect") or v:IsA("BloomEffect") or v:IsA("DepthOfFieldEffect") then
+                    v.Enabled = true
+                end
+            end
+        end)
+        
+        if LowPerformanceConnection then
+            LowPerformanceConnection:Disconnect()
+            LowPerformanceConnection = nil
+        end
+    end
+end
+
+-- ============================================
+-- CAMBIAR MUNDO
+-- ============================================
+local function SetMundo1()
+    CurrentMundo = 1
+    TPPosition = TPPositionMundo1
+    print("🌍 Cambiado a MUNDO 1")
+    if Settings.AutoTP then
+        local hrp = GetHRP()
+        if hrp then
+            pcall(function()
+                hrp.CFrame = CFrame.new(GetTargetPosition())
+                hrp.Velocity = Vector3.new(0, 0, 0)
+            end)
+        end
+    end
+end
+
+local function SetMundo2()
+    CurrentMundo = 2
+    TPPosition = TPPositionMundo2
+    print("🌊 Cambiado a MUNDO 2")
+    if Settings.AutoTP then
+        local hrp = GetHRP()
+        if hrp then
+            pcall(function()
+                hrp.CFrame = CFrame.new(GetTargetPosition())
+                hrp.Velocity = Vector3.new(0, 0, 0)
+            end)
+        end
+    end
+end
+
+-- ============================================
+-- DESTROY GUI
 -- ============================================
 local function DestroyGUI()
     if TPLoop then pcall(function() TPLoop:Disconnect() end) TPLoop = nil end
@@ -418,12 +381,28 @@ local function DestroyGUI()
     if RebirthLoop then pcall(function() RebirthLoop:Disconnect() end) RebirthLoop = nil end
     if SpeedMultiplierLoop then pcall(function() SpeedMultiplierLoop:Disconnect() end) SpeedMultiplierLoop = nil end
     if FloatPulseConnection then pcall(function() FloatPulseConnection:Disconnect() end) FloatPulseConnection = nil end
+    if LowPerformanceConnection then pcall(function() LowPerformanceConnection:Disconnect() end) LowPerformanceConnection = nil end
+    
+    pcall(function()
+        Lighting.Brightness = 1
+        Lighting.Ambient = Color3.fromRGB(0, 0, 0)
+        Lighting.OutdoorAmbient = Color3.fromRGB(0, 0, 0)
+        Lighting.ShadowSoftness = 0.5
+        Lighting.GlobalShadows = true
+        for _, v in ipairs(Workspace:GetDescendants()) do
+            if v:IsA("ParticleEmitter") or v:IsA("Trail") or v:IsA("Beam") then
+                v.Enabled = true
+            end
+            if v:IsA("BasePart") then
+                v.CastShadow = true
+            end
+        end
+    end)
     
     pcall(function()
         local gui = PlayerGui:FindFirstChild("AutoTPProGUI")
         if gui then gui:Destroy() end
     end)
-    
     print("🗑️ GUI destruida")
 end
 
@@ -444,18 +423,18 @@ local function CreateGUI()
     
     -- BOTÓN FLOTANTE
     local toggleButton = Instance.new("TextButton")
-    toggleButton.Size = UDim2.new(0, Sizes.FloatButtonSize, 0, Sizes.FloatButtonSize)
-    toggleButton.Position = UDim2.new(Positions.FloatButton.X, Positions.FloatButton.OffsetX, Positions.FloatButton.Y, Positions.FloatButton.OffsetY)
-    toggleButton.BackgroundColor3 = Colors.FloatButtonColor
-    toggleButton.Text = Texts.FloatButton
-    toggleButton.TextColor3 = Colors.FloatButtonText
-    toggleButton.Font = Fonts.FloatButton
-    toggleButton.TextSize = 34
+    toggleButton.Size = UDim2.new(0, 85, 0, 85)
+    toggleButton.Position = UDim2.new(1, -100, 0, 25)
+    toggleButton.BackgroundColor3 = Color3.fromRGB(255, 200, 50)
+    toggleButton.Text = "🏄"
+    toggleButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+    toggleButton.Font = Enum.Font.GothamBlack
+    toggleButton.TextSize = 38
     toggleButton.Parent = screenGui
     toggleButton.ZIndex = 999
     
     local btnCorner = Instance.new("UICorner")
-    btnCorner.CornerRadius = UDim.new(Sizes.FloatButtonCorner, 0)
+    btnCorner.CornerRadius = UDim.new(1, 0)
     btnCorner.Parent = toggleButton
     
     local btnStroke = Instance.new("UIStroke")
@@ -463,20 +442,20 @@ local function CreateGUI()
     btnStroke.Thickness = 3
     btnStroke.Parent = toggleButton
     
-    local shadow = Instance.new("ImageLabel")
-    shadow.Size = UDim2.new(1.4, 0, 1.4, 0)
-    shadow.Position = UDim2.new(-0.2, 0, -0.2, 0)
-    shadow.BackgroundTransparency = 1
-    shadow.Image = "rbxassetid://13130321673"
-    shadow.ImageTransparency = 0.5
-    shadow.ZIndex = 998
-    shadow.Parent = toggleButton
+    local glow = Instance.new("ImageLabel")
+    glow.Size = UDim2.new(1.6, 0, 1.6, 0)
+    glow.Position = UDim2.new(-0.3, 0, -0.3, 0)
+    glow.BackgroundTransparency = 1
+    glow.Image = "rbxassetid://13130321673"
+    glow.ImageTransparency = 0.6
+    glow.ZIndex = 998
+    glow.Parent = toggleButton
     
     -- PANEL
     local panel = Instance.new("Frame")
     panel.Size = UDim2.new(0, 0, 0, 0)
-    panel.Position = UDim2.new(Positions.Panel.X, Positions.Panel.OffsetX, Positions.Panel.Y, Positions.Panel.OffsetY)
-    panel.BackgroundColor3 = Colors.Background
+    panel.Position = UDim2.new(0.5, -220, 0.5, -230)
+    panel.BackgroundColor3 = Color3.fromRGB(10, 10, 30)
     panel.BackgroundTransparency = 0
     panel.Visible = false
     panel.ClipsDescendants = true
@@ -484,44 +463,58 @@ local function CreateGUI()
     panel.ZIndex = 100
     
     local panelCorner = Instance.new("UICorner")
-    panelCorner.CornerRadius = UDim.new(0, Sizes.PanelCorner)
+    panelCorner.CornerRadius = UDim.new(0, 24)
     panelCorner.Parent = panel
     
     local panelStroke2 = Instance.new("UIStroke")
-    panelStroke2.Color = Colors.Border
+    panelStroke2.Color = Color3.fromRGB(120, 80, 255)
     panelStroke2.Thickness = 2
     panelStroke2.Transparency = 0.3
     panelStroke2.Parent = panel
     
     -- TÍTULO
     local header = Instance.new("Frame")
-    header.Size = UDim2.new(1, 0, 0, Sizes.HeaderHeight)
-    header.BackgroundColor3 = Colors.Header
+    header.Size = UDim2.new(1, 0, 0, 55)
+    header.BackgroundColor3 = Color3.fromRGB(25, 20, 60)
     header.Parent = panel
     
     local headerCorner = Instance.new("UICorner")
-    headerCorner.CornerRadius = UDim.new(0, Sizes.HeaderCorner)
+    headerCorner.CornerRadius = UDim.new(0, 24)
     headerCorner.Parent = header
     
     local titleText = Instance.new("TextLabel")
     titleText.Size = UDim2.new(1, -50, 1, 0)
-    titleText.Position = UDim2.new(0, Positions.HeaderText.X, 0, Positions.HeaderText.Y)
+    titleText.Position = UDim2.new(0, 15, 0, 0)
     titleText.BackgroundTransparency = 1
-    titleText.Text = Texts.Title
-    titleText.TextColor3 = Colors.Title
-    titleText.Font = Fonts.Title
-    titleText.TextSize = Sizes.TitleSize
+    titleText.Text = "🏄 +1 SCAPE FROM SPEED BUBBLES"
+    titleText.TextColor3 = Color3.fromRGB(255, 200, 100)
+    titleText.Font = Enum.Font.GothamBlack
+    titleText.TextSize = 20
     titleText.TextXAlignment = Enum.TextXAlignment.Left
     titleText.Parent = header
     
+    -- Animación de título
+    task.spawn(function()
+        while titleText and titleText.Parent do
+            TweenService:Create(titleText, TweenInfo.new(2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
+                TextColor3 = Color3.fromRGB(255, 200, 100)
+            }):Play()
+            task.wait(2)
+            TweenService:Create(titleText, TweenInfo.new(2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
+                TextColor3 = Color3.fromRGB(255, 220, 150)
+            }):Play()
+            task.wait(2)
+        end
+    end)
+    
     local closeBtn = Instance.new("TextButton")
-    closeBtn.Size = UDim2.new(0, 32, 0, 32)
-    closeBtn.Position = UDim2.new(Positions.CloseBtn.X, Positions.CloseBtn.OffsetX, Positions.CloseBtn.Y, Positions.CloseBtn.OffsetY)
-    closeBtn.BackgroundColor3 = Colors.CloseBtn
-    closeBtn.Text = Texts.CloseButton
-    closeBtn.TextColor3 = Colors.TextColor
-    closeBtn.Font = Fonts.Close
-    closeBtn.TextSize = 18
+    closeBtn.Size = UDim2.new(0, 35, 0, 35)
+    closeBtn.Position = UDim2.new(1, -45, 0.5, -18)
+    closeBtn.BackgroundColor3 = Color3.fromRGB(40, 30, 70)
+    closeBtn.Text = "✕"
+    closeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    closeBtn.Font = Enum.Font.GothamBold
+    closeBtn.TextSize = 20
     closeBtn.AutoButtonColor = false
     closeBtn.Parent = header
     
@@ -530,201 +523,337 @@ local function CreateGUI()
     closeCorner.Parent = closeBtn
     
     closeBtn.MouseEnter:Connect(function()
-        pcall(function()
-            TweenService:Create(closeBtn, TweenInfo.new(Animations.HoverDuration), {
-                BackgroundColor3 = Colors.CloseBtnHover
-            }):Play()
-        end)
+        TweenService:Create(closeBtn, TweenInfo.new(0.2), {
+            BackgroundColor3 = Color3.fromRGB(200, 40, 40),
+            Size = UDim2.new(0, 38, 0, 38)
+        }):Play()
     end)
     
     closeBtn.MouseLeave:Connect(function()
-        pcall(function()
-            TweenService:Create(closeBtn, TweenInfo.new(Animations.HoverDuration), {
-                BackgroundColor3 = Colors.CloseBtn
-            }):Play()
-        end)
+        TweenService:Create(closeBtn, TweenInfo.new(0.2), {
+            BackgroundColor3 = Color3.fromRGB(40, 30, 70),
+            Size = UDim2.new(0, 35, 0, 35)
+        }):Play()
     end)
+    
+    closeBtn.MouseButton1Click:Connect(function()
+        panelOpen = false
+        TweenService:Create(panel, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
+            Size = UDim2.new(0, 0, 0, 0),
+            BackgroundTransparency = 1
+        }):Play()
+        task.wait(0.3)
+        panel.Visible = false
+    end)
+    
+    -- BOTONES MUNDO 1 Y MUNDO 2
+    local mundoContainer = Instance.new("Frame")
+    mundoContainer.Size = UDim2.new(1, 0, 0, 45)
+    mundoContainer.Position = UDim2.new(0, 0, 0, 55)
+    mundoContainer.BackgroundTransparency = 1
+    mundoContainer.Parent = panel
+    
+    -- Mundo 1
+    local mundo1Btn = Instance.new("TextButton")
+    mundo1Btn.Size = UDim2.new(0, 110, 0, 32)
+    mundo1Btn.Position = UDim2.new(0.1, 0, 0.5, -16)
+    mundo1Btn.BackgroundColor3 = Color3.fromRGB(0, 200, 100)
+    mundo1Btn.Text = "🌍 MUNDO 1"
+    mundo1Btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    mundo1Btn.Font = Enum.Font.GothamBold
+    mundo1Btn.TextSize = 14
+    mundo1Btn.BorderSizePixel = 0
+    mundo1Btn.Parent = mundoContainer
+    
+    local mundo1Corner = Instance.new("UICorner")
+    mundo1Corner.CornerRadius = UDim.new(0, 8)
+    mundo1Corner.Parent = mundo1Btn
+    
+    mundo1Btn.MouseEnter:Connect(function()
+        TweenService:Create(mundo1Btn, TweenInfo.new(0.2), {
+            Size = UDim2.new(0, 115, 0, 36)
+        }):Play()
+    end)
+    
+    mundo1Btn.MouseLeave:Connect(function()
+        TweenService:Create(mundo1Btn, TweenInfo.new(0.2), {
+            Size = UDim2.new(0, 110, 0, 32)
+        }):Play()
+    end)
+    
+    mundo1Btn.MouseButton1Click:Connect(function()
+        SetMundo1()
+        mundo1Btn.BackgroundColor3 = Color3.fromRGB(0, 200, 100)
+        mundo2Btn.BackgroundColor3 = Color3.fromRGB(60, 50, 150)
+        TweenService:Create(mundo1Btn, TweenInfo.new(0.1), {
+            Size = UDim2.new(0, 100, 0, 28)
+        }):Play()
+        task.wait(0.1)
+        TweenService:Create(mundo1Btn, TweenInfo.new(0.1), {
+            Size = UDim2.new(0, 110, 0, 32)
+        }):Play()
+    end)
+    
+    -- Mundo 2
+    local mundo2Btn = Instance.new("TextButton")
+    mundo2Btn.Size = UDim2.new(0, 110, 0, 32)
+    mundo2Btn.Position = UDim2.new(0.55, 0, 0.5, -16)
+    mundo2Btn.BackgroundColor3 = Color3.fromRGB(60, 50, 150)
+    mundo2Btn.Text = "🌊 MUNDO 2"
+    mundo2Btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    mundo2Btn.Font = Enum.Font.GothamBold
+    mundo2Btn.TextSize = 14
+    mundo2Btn.BorderSizePixel = 0
+    mundo2Btn.Parent = mundoContainer
+    
+    local mundo2Corner = Instance.new("UICorner")
+    mundo2Corner.CornerRadius = UDim.new(0, 8)
+    mundo2Corner.Parent = mundo2Btn
+    
+    mundo2Btn.MouseEnter:Connect(function()
+        TweenService:Create(mundo2Btn, TweenInfo.new(0.2), {
+            Size = UDim2.new(0, 115, 0, 36)
+        }):Play()
+    end)
+    
+    mundo2Btn.MouseLeave:Connect(function()
+        TweenService:Create(mundo2Btn, TweenInfo.new(0.2), {
+            Size = UDim2.new(0, 110, 0, 32)
+        }):Play()
+    end)
+    
+    mundo2Btn.MouseButton1Click:Connect(function()
+        SetMundo2()
+        mundo2Btn.BackgroundColor3 = Color3.fromRGB(0, 200, 100)
+        mundo1Btn.BackgroundColor3 = Color3.fromRGB(60, 50, 150)
+        TweenService:Create(mundo2Btn, TweenInfo.new(0.1), {
+            Size = UDim2.new(0, 100, 0, 28)
+        }):Play()
+        task.wait(0.1)
+        TweenService:Create(mundo2Btn, TweenInfo.new(0.1), {
+            Size = UDim2.new(0, 110, 0, 32)
+        }):Play()
+    end)
+    
+    -- NOTA
+    local nota = Instance.new("TextLabel")
+    nota.Size = UDim2.new(1, 0, 0, 22)
+    nota.Position = UDim2.new(0, 0, 0, 102)
+    nota.BackgroundTransparency = 1
+    nota.Text = "📍 Selecciona un mundo para cambiar la posición del TP"
+    nota.TextColor3 = Color3.fromRGB(150, 150, 200)
+    nota.TextSize = 12
+    nota.Font = Enum.Font.Gotham
+    nota.TextXAlignment = Enum.TextXAlignment.Center
+    nota.Parent = panel
     
     -- SCROLLING FRAME
     local scrollFrame = Instance.new("ScrollingFrame")
-    scrollFrame.Size = UDim2.new(1, -Sizes.ScrollPadding, 1, -Sizes.HeaderHeight - 30)
-    scrollFrame.Position = UDim2.new(0, Sizes.ScrollPadding/2, 0, Sizes.HeaderHeight + 15)
+    scrollFrame.Size = UDim2.new(1, -20, 1, -55 - 75 - 35)
+    scrollFrame.Position = UDim2.new(0, 10, 0, 55 + 75 + 15)
     scrollFrame.BackgroundTransparency = 1
     scrollFrame.BorderSizePixel = 0
-    scrollFrame.ScrollBarThickness = Sizes.ScrollThickness
-    scrollFrame.ScrollBarImageColor3 = Colors.Border
+    scrollFrame.ScrollBarThickness = 4
+    scrollFrame.ScrollBarImageColor3 = Color3.fromRGB(120, 80, 255)
     scrollFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
     scrollFrame.AutomaticCanvasSize = Enum.AutomaticSize.Y
     scrollFrame.Parent = panel
     
     local layout = Instance.new("UIListLayout")
-    layout.Padding = UDim.new(0, 6)
+    layout.Padding = UDim.new(0, 8)
     layout.SortOrder = Enum.SortOrder.LayoutOrder
     layout.Parent = scrollFrame
     
-    -- FUNCIÓN PARA CREAR TOGGLE
+    -- FUNCIÓN PARA CREAR TOGGLE CON ANIMACIÓN
     local function CreateToggle(text, desc, icon, toggleFunc, getState, isAvailable)
         local frame = Instance.new("Frame")
-        frame.Size = UDim2.new(1, 0, 0, Sizes.ToggleHeight)
-        frame.BackgroundColor3 = isAvailable and Colors.FrameBG or Colors.FrameBGBlocked
-        frame.BackgroundTransparency = isAvailable and 0.2 or 0.1
+        frame.Size = UDim2.new(1, 0, 0, 48)
+        frame.BackgroundColor3 = Color3.fromRGB(20, 20, 50)
+        frame.BackgroundTransparency = 0.2
         frame.Parent = scrollFrame
         
         local fCorner = Instance.new("UICorner")
-        fCorner.CornerRadius = UDim.new(0, Sizes.ToggleCorner)
+        fCorner.CornerRadius = UDim.new(0, 8)
         fCorner.Parent = frame
         
         local fStroke = Instance.new("UIStroke")
-        fStroke.Color = isAvailable and Colors.Stroke or Colors.StrokeBlocked
-        fStroke.Thickness = Sizes.ToggleStroke
-        fStroke.Transparency = isAvailable and 0.5 or 0.3
+        fStroke.Color = Color3.fromRGB(100, 70, 220)
+        fStroke.Thickness = 1.5
+        fStroke.Transparency = 0.5
         fStroke.Parent = frame
         
+        -- Animación de entrada del frame
+        frame.Size = UDim2.new(0, 0, 0, 48)
+        task.spawn(function()
+            TweenService:Create(frame, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+                Size = UDim2.new(1, 0, 0, 48)
+            }):Play()
+        end)
+        
         local iconLabel = Instance.new("TextLabel")
-        iconLabel.Size = UDim2.new(0, Sizes.IconSize, 0, Sizes.IconSize)
-        iconLabel.Position = UDim2.new(0, 8, 0.5, -Sizes.IconSize/2)
+        iconLabel.Size = UDim2.new(0, 32, 0, 32)
+        iconLabel.Position = UDim2.new(0, 8, 0.5, -16)
         iconLabel.BackgroundTransparency = 1
         iconLabel.Text = icon
-        iconLabel.TextColor3 = Colors.IconColor
-        iconLabel.Font = Fonts.Icon
-        iconLabel.TextSize = Sizes.IconTextSize
+        iconLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+        iconLabel.Font = Enum.Font.Gotham
+        iconLabel.TextSize = 20
         iconLabel.Parent = frame
         
         local label = Instance.new("TextLabel")
-        label.Size = UDim2.new(1, -90, 0, 18)
+        label.Size = UDim2.new(1, -90, 0, 20)
         label.Position = UDim2.new(0, 44, 0, 3)
         label.BackgroundTransparency = 1
         label.Text = text
-        label.TextColor3 = isAvailable and Colors.TextColor or Colors.BlockedText
-        label.Font = Fonts.Label
-        label.TextSize = Sizes.LabelSize
+        label.TextColor3 = Color3.fromRGB(255, 255, 255)
+        label.Font = Enum.Font.GothamBold
+        label.TextSize = 13
         label.TextXAlignment = Enum.TextXAlignment.Left
         label.Parent = frame
         
         local descLabel = Instance.new("TextLabel")
-        descLabel.Size = UDim2.new(1, -90, 0, 14)
-        descLabel.Position = UDim2.new(0, 44, 0, 22)
+        descLabel.Size = UDim2.new(1, -90, 0, 16)
+        descLabel.Position = UDim2.new(0, 44, 0, 24)
         descLabel.BackgroundTransparency = 1
         descLabel.Text = desc
-        descLabel.TextColor3 = isAvailable and Colors.DescColor or Colors.BlockedText
-        descLabel.Font = Fonts.Desc
-        descLabel.TextSize = Sizes.DescSize
+        descLabel.TextColor3 = Color3.fromRGB(160, 160, 210)
+        descLabel.Font = Enum.Font.GothamMedium
+        descLabel.TextSize = 10
         descLabel.TextXAlignment = Enum.TextXAlignment.Left
         descLabel.Parent = frame
         
         local toggleBtn = Instance.new("TextButton")
-        toggleBtn.Size = UDim2.new(0, Sizes.ToggleBtnWidth, 0, Sizes.ToggleBtnHeight)
-        toggleBtn.Position = UDim2.new(1, -(Sizes.ToggleBtnWidth + 8), 0.5, -Sizes.ToggleBtnHeight/2)
-        toggleBtn.BackgroundColor3 = isAvailable and Colors.ToggleOff or Color3.fromRGB(40, 40, 50)
-        toggleBtn.TextColor3 = isAvailable and Colors.ToggleTextOff or Color3.fromRGB(100, 100, 120)
+        toggleBtn.Size = UDim2.new(0, 55, 0, 28)
+        toggleBtn.Position = UDim2.new(1, -60, 0.5, -14)
+        toggleBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 80)
+        toggleBtn.TextColor3 = Color3.fromRGB(255, 100, 100)
         toggleBtn.Text = "OFF"
-        toggleBtn.Font = Fonts.Toggle
-        toggleBtn.TextSize = 10
+        toggleBtn.Font = Enum.Font.GothamBold
+        toggleBtn.TextSize = 11
         toggleBtn.AutoButtonColor = false
         toggleBtn.Parent = frame
         
         local btnCorner2 = Instance.new("UICorner")
-        btnCorner2.CornerRadius = UDim.new(0, Sizes.ToggleBtnCorner)
+        btnCorner2.CornerRadius = UDim.new(0, 5)
         btnCorner2.Parent = toggleBtn
+        
+        toggleBtn.MouseEnter:Connect(function()
+            TweenService:Create(toggleBtn, TweenInfo.new(0.2), {
+                Size = UDim2.new(0, 58, 0, 30)
+            }):Play()
+        end)
+        
+        toggleBtn.MouseLeave:Connect(function()
+            TweenService:Create(toggleBtn, TweenInfo.new(0.2), {
+                Size = UDim2.new(0, 55, 0, 28)
+            }):Play()
+        end)
         
         toggleBtn.MouseButton1Click:Connect(function()
             if not isAvailable then return end
             toggleFunc()
             local state = getState()
-            toggleBtn.BackgroundColor3 = state and Colors.ToggleOn or Colors.ToggleOff
+            toggleBtn.BackgroundColor3 = state and Color3.fromRGB(0, 220, 120) or Color3.fromRGB(60, 60, 80)
             toggleBtn.Text = state and "ON" or "OFF"
-            toggleBtn.TextColor3 = state and Colors.ToggleTextOn or Colors.ToggleTextOff
+            toggleBtn.TextColor3 = state and Color3.fromRGB(150, 255, 200) or Color3.fromRGB(255, 100, 100)
+            
+            TweenService:Create(toggleBtn, TweenInfo.new(0.1), {
+                Size = UDim2.new(0, 50, 0, 24)
+            }):Play()
+            task.wait(0.1)
+            TweenService:Create(toggleBtn, TweenInfo.new(0.1), {
+                Size = UDim2.new(0, 55, 0, 28)
+            }):Play()
             
             if state then
-                pcall(function()
-                    TweenService:Create(frame, TweenInfo.new(Animations.ToggleDuration), {
-                        BackgroundColor3 = Colors.FrameBGOn,
-                        BackgroundTransparency = 0.1
-                    }):Play()
-                    TweenService:Create(fStroke, TweenInfo.new(Animations.ToggleDuration), {
-                        Color = Colors.StrokeOn,
-                        Transparency = 0
-                    }):Play()
-                end)
+                TweenService:Create(frame, TweenInfo.new(0.3), {
+                    BackgroundColor3 = Color3.fromRGB(20, 50, 35),
+                    BackgroundTransparency = 0.1
+                }):Play()
+                TweenService:Create(fStroke, TweenInfo.new(0.3), {
+                    Color = Color3.fromRGB(0, 220, 120),
+                    Transparency = 0
+                }):Play()
             else
-                pcall(function()
-                    TweenService:Create(frame, TweenInfo.new(Animations.ToggleDuration), {
-                        BackgroundColor3 = Colors.FrameBG,
-                        BackgroundTransparency = 0.2
-                    }):Play()
-                    TweenService:Create(fStroke, TweenInfo.new(Animations.ToggleDuration), {
-                        Color = Colors.Stroke,
-                        Transparency = 0.5
-                    }):Play()
-                end)
+                TweenService:Create(frame, TweenInfo.new(0.3), {
+                    BackgroundColor3 = Color3.fromRGB(20, 20, 50),
+                    BackgroundTransparency = 0.2
+                }):Play()
+                TweenService:Create(fStroke, TweenInfo.new(0.3), {
+                    Color = Color3.fromRGB(100, 70, 220),
+                    Transparency = 0.5
+                }):Play()
             end
         end)
     end
     
-    -- CREAR 5 TOGGLES
-    CreateToggle(Texts.Option1, Texts.Option1Desc, Texts.Option1Icon, ToggleAutoTP, function() return Settings.AutoTP end, OpcionesDisponibles.AutoTP)
-    CreateToggle(Texts.Option2, Texts.Option2Desc, Texts.Option2Icon, ToggleInvisible, function() return Settings.Invisible end, OpcionesDisponibles.Invisible)
-    CreateToggle(Texts.Option3, Texts.Option3Desc, Texts.Option3Icon, ToggleAutoFarm, function() return Settings.AutoFarm end, OpcionesDisponibles.AutoFarm)
-    CreateToggle(Texts.Option4, Texts.Option4Desc, Texts.Option4Icon, ToggleAutoRebirth, function() return Settings.AutoRebirth end, OpcionesDisponibles.AutoRebirth)
-    CreateToggle(Texts.Option5, Texts.Option5Desc, Texts.Option5Icon, ToggleSpeedMultiplier, function() return Settings.SpeedMultiplier end, OpcionesDisponibles.SpeedMultiplier)
+    -- CREAR 6 TOGGLES
+    CreateToggle("AUTO TELEPORT", "📍 TP a posición guardada", "📍", ToggleAutoTP, function() return Settings.AutoTP end, true)
+    CreateToggle("INVISIBLE", "👻 Invisible para otros jugadores", "👻", ToggleInvisible, function() return Settings.Invisible end, true)
+    CreateToggle("AUTO-FARM SPEED", "⚡ Gana velocidad automáticamente", "⚡", ToggleAutoFarm, function() return Settings.AutoFarm end, true)
+    CreateToggle("AUTO-REBIRTH", "🔄 Rebirth automático al nivel requerido", "🔄", ToggleAutoRebirth, function() return Settings.AutoRebirth end, true)
+    CreateToggle("SPEED MULTIPLIER", "💨 Multiplica la velocidad ganada x20", "💨", ToggleSpeedMultiplier, function() return Settings.SpeedMultiplier end, true)
+    CreateToggle("LOW PERFORMANCE", "⚡ Elimina gráficos y mejora FPS", "⚡", ToggleLowPerformance, function() return Settings.LowPerformance end, true)
     
     -- BOTÓN DESTROY
     local destroyBtn = Instance.new("TextButton")
-    destroyBtn.Size = UDim2.new(1, 0, 0, Sizes.DestroyHeight)
-    destroyBtn.Position = UDim2.new(0, 0, 1, -(Sizes.DestroyHeight + 4))
-    destroyBtn.BackgroundColor3 = Colors.ButtonDestroy
-    destroyBtn.Text = Texts.DestroyButton
-    destroyBtn.TextColor3 = Colors.TextColor
-    destroyBtn.Font = Fonts.Destroy
-    destroyBtn.TextSize = 11
+    destroyBtn.Size = UDim2.new(1, 0, 0, 35)
+    destroyBtn.Position = UDim2.new(0, 0, 1, -40)
+    destroyBtn.BackgroundColor3 = Color3.fromRGB(200, 30, 30)
+    destroyBtn.Text = "🗑️ DESTROY GUI"
+    destroyBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    destroyBtn.Font = Enum.Font.GothamBold
+    destroyBtn.TextSize = 12
     destroyBtn.Parent = scrollFrame
     
     local destroyCorner = Instance.new("UICorner")
-    destroyCorner.CornerRadius = UDim.new(0, Sizes.DestroyCorner)
+    destroyCorner.CornerRadius = UDim.new(0, 8)
     destroyCorner.Parent = destroyBtn
     
     destroyBtn.MouseEnter:Connect(function()
-        pcall(function()
-            TweenService:Create(destroyBtn, TweenInfo.new(Animations.HoverDuration), {
-                BackgroundColor3 = Colors.ButtonDestroyHover
-            }):Play()
-        end)
+        TweenService:Create(destroyBtn, TweenInfo.new(0.2), {
+            BackgroundColor3 = Color3.fromRGB(255, 50, 50),
+            Size = UDim2.new(1.02, 0, 0, 38)
+        }):Play()
     end)
     
     destroyBtn.MouseLeave:Connect(function()
-        pcall(function()
-            TweenService:Create(destroyBtn, TweenInfo.new(Animations.HoverDuration), {
-                BackgroundColor3 = Colors.ButtonDestroy
-            }):Play()
-        end)
+        TweenService:Create(destroyBtn, TweenInfo.new(0.2), {
+            BackgroundColor3 = Color3.fromRGB(200, 30, 30),
+            Size = UDim2.new(1, 0, 0, 35)
+        }):Play()
     end)
     
     destroyBtn.MouseButton1Click:Connect(function()
         DestroyGUI()
     end)
     
-    -- ABRIR/CERRAR
+    -- ABRIR/CERRAR CON ANIMACIÓN
     local panelOpen = false
     toggleButton.MouseButton1Click:Connect(function()
         panelOpen = not panelOpen
         panel.Visible = true
         if panelOpen then
-            panel.Size = UDim2.new(0, Sizes.PanelWidth, 0, Sizes.PanelHeight)
-            panel.BackgroundTransparency = 0
-        else
             panel.Size = UDim2.new(0, 0, 0, 0)
             panel.BackgroundTransparency = 1
+            TweenService:Create(panel, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+                Size = UDim2.new(0, 440, 0, 460),
+                BackgroundTransparency = 0
+            }):Play()
+            TweenService:Create(toggleButton, TweenInfo.new(0.3), {
+                Rotation = 45
+            }):Play()
+        else
+            TweenService:Create(panel, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
+                Size = UDim2.new(0, 0, 0, 0),
+                BackgroundTransparency = 1
+            }):Play()
+            TweenService:Create(toggleButton, TweenInfo.new(0.3), {
+                Rotation = 0
+            }):Play()
             task.wait(0.3)
             panel.Visible = false
         end
-    end)
-    
-    closeBtn.MouseButton1Click:Connect(function()
-        panelOpen = false
-        panel.Size = UDim2.new(0, 0, 0, 0)
-        panel.BackgroundTransparency = 1
-        task.wait(0.3)
-        panel.Visible = false
     end)
     
     -- ARRASTRE BOTÓN
@@ -789,37 +918,38 @@ local function CreateGUI()
         end
     end)
     
-    -- EFECTO DE PULSACIÓN
+    -- EFECTO DE PULSACIÓN EN EL BOTÓN
     FloatPulseConnection = RunService.Heartbeat:Connect(function()
         if not toggleButton or not toggleButton.Parent then return end
         local scale = 1 + 0.03 * math.sin(tick() * 1.5)
-        pcall(function()
-            TweenService:Create(toggleButton, TweenInfo.new(0.1), {
-                Size = UDim2.new(0, Sizes.FloatButtonSize * scale, 0, Sizes.FloatButtonSize * scale)
-            }):Play()
-        end)
+        TweenService:Create(toggleButton, TweenInfo.new(0.1), {
+            Size = UDim2.new(0, 85 * scale, 0, 85 * scale)
+        }):Play()
+        
+        if glow then
+            local glowScale = 1.6 + 0.2 * math.sin(tick() * 1.5)
+            glow.Size = UDim2.new(glowScale, 0, glowScale, 0)
+            glow.ImageTransparency = 0.5 + 0.2 * math.sin(tick() * 1.5)
+        end
     end)
     
-    -- MENSAJE
-    local targetPos = GetTargetPosition()
     print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
     print("🏄 +1 SCAPE FROM SPEED BUBBLES")
     print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-    print("📍 TP a: X=" .. targetPos.X .. ", Y=" .. targetPos.Y .. ", Z=" .. targetPos.Z)
-    print("💨 Speed Multiplier: x" .. SPEED_MULTIPLIER)
+    print("📍 Mundo 1: X=" .. TPPositionMundo1.X .. ", Y=" .. TPPositionMundo1.Y .. ", Z=" .. TPPositionMundo1.Z)
+    print("📍 Mundo 2: X=" .. TPPositionMundo2.X .. ", Y=" .. TPPositionMundo2.Y .. ", Z=" .. TPPositionMundo2.Z)
     print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
     print("📋 Presiona 🏄 para abrir el panel")
     print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
 end
 
 -- ============================================
--- INICIALIZAR (NO TOCAR)
+-- INICIALIZAR
 -- ============================================
 task.spawn(function()
     while not LocalPlayer or not LocalPlayer.PlayerGui do
         task.wait(0.5)
     end
-    
     FindRemotes()
     CreateGUI()
 end)
