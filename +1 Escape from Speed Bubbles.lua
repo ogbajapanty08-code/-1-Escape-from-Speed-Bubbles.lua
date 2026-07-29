@@ -1,5 +1,5 @@
 --[[
-    🏄 +1 SCAPE FROM SPEED BUBBLES - CON SPEED MULTIPLIER
+    🏄 +1 SCAPE FROM SPEED BUBBLES - CON SPEED MULTIPLIER x65536
     SOLO 6 OPCIONES QUE FUNCIONAN
 ]]
 
@@ -217,21 +217,50 @@ local function ToggleAutoRebirth()
     end
 end
 
+-- ============================================
+-- SPEED MULTIPLIER x65536
+-- ============================================
+local SPEED_MULTIPLIER = 35
+
 local function ToggleSpeedMultiplier()
     Settings.SpeedMultiplier = not Settings.SpeedMultiplier
     if Settings.SpeedMultiplier then
         if not AddSpeed then print("❌ AddSpeed no disponible") Settings.SpeedMultiplier = false return end
-        print("💨 Speed Multiplier ACTIVADO (x20)")
+        print("💨 Speed Multiplier ACTIVADO (x" .. SPEED_MULTIPLIER .. ")")
+        
         if SpeedMultiplierLoop then pcall(function() SpeedMultiplierLoop:Disconnect() end) SpeedMultiplierLoop = nil end
+        
         SpeedMultiplierLoop = RunService.Heartbeat:Connect(function()
             if not Settings.SpeedMultiplier then return end
-            for i = 1, 20 do
-                pcall(function() AddSpeed:FireServer() end)
+            
+            -- Modificar SpeedPeakMult si existe
+            local stats = LocalPlayer:FindFirstChild("Stats")
+            if stats then
+                local peak = stats:FindFirstChild("SpeedPeakMult")
+                if peak then
+                    peak.Value = SPEED_MULTIPLIER
+                end
+            end
+            
+            -- Llamar AddSpeed múltiples veces para multiplicar
+            for i = 1, SPEED_MULTIPLIER do
+                pcall(function()
+                    AddSpeed:FireServer()
+                end)
             end
         end)
     else
         print("💨 Speed Multiplier DESACTIVADO")
         if SpeedMultiplierLoop then pcall(function() SpeedMultiplierLoop:Disconnect() end) SpeedMultiplierLoop = nil end
+        
+        -- Restaurar SpeedPeakMult
+        local stats = LocalPlayer:FindFirstChild("Stats")
+        if stats then
+            local peak = stats:FindFirstChild("SpeedPeakMult")
+            if peak then
+                peak.Value = 1
+            end
+        end
     end
 end
 
@@ -792,7 +821,7 @@ local function CreateGUI()
     CreateToggle("INVISIBLE", "👻 Invisible para otros jugadores", "👻", ToggleInvisible, function() return Settings.Invisible end, true)
     CreateToggle("AUTO-FARM SPEED", "⚡ Gana velocidad automáticamente", "⚡", ToggleAutoFarm, function() return Settings.AutoFarm end, true)
     CreateToggle("AUTO-REBIRTH", "🔄 Rebirth automático al nivel requerido", "🔄", ToggleAutoRebirth, function() return Settings.AutoRebirth end, true)
-    CreateToggle("SPEED MULTIPLIER", "💨 Multiplica la velocidad ganada x20", "💨", ToggleSpeedMultiplier, function() return Settings.SpeedMultiplier end, true)
+    CreateToggle("SPEED MULTIPLIER", "💨 Multiplica la velocidad ganada x" .. SPEED_MULTIPLIER, "💨", ToggleSpeedMultiplier, function() return Settings.SpeedMultiplier end, true)
     CreateToggle("LOW PERFORMANCE", "⚡ Elimina gráficos y mejora FPS", "⚡", ToggleLowPerformance, function() return Settings.LowPerformance end, true)
     
     -- BOTÓN DESTROY
@@ -938,6 +967,7 @@ local function CreateGUI()
     print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
     print("📍 Mundo 1: X=" .. TPPositionMundo1.X .. ", Y=" .. TPPositionMundo1.Y .. ", Z=" .. TPPositionMundo1.Z)
     print("📍 Mundo 2: X=" .. TPPositionMundo2.X .. ", Y=" .. TPPositionMundo2.Y .. ", Z=" .. TPPositionMundo2.Z)
+    print("💨 Speed Multiplier: x" .. SPEED_MULTIPLIER)
     print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
     print("📋 Presiona 🏄 para abrir el panel")
     print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
@@ -955,3 +985,4 @@ task.spawn(function()
 end)
 
 print("✅ Script cargado exitosamente!")
+print("💨 Speed Multiplier: x" .. SPEED_MULTIPLIER)
